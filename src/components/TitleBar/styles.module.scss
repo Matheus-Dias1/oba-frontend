@@ -1,0 +1,41 @@
+@import '../../styles/pallete.scss';
+
+.title-bar {
+  background-color: $primary-darker;
+  padding: 0.4em;
+  display: flex;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+
+  p {
+    color: $white;
+    font-size: 0.8em;
+    font-weight: 900;
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: 0.2em;
+  }
+
+  .window-actions{
+    margin-left: auto;
+    display: flex;
+    gap: 0.5em;
+
+    button {
+      background: none;
+      border: none;
+      display: grid;
+      place-items: center;
+      -webkit-app-region: no-drag;
+    }
+
+    button:hover{
+      cursor: pointer;
+    }
+  }
+  .icon {
+    width: 0.6em;
+    fill: $white;
+  }
+}

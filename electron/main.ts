@@ -14,9 +14,10 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 function createWindow() {
   mainWindow = new BrowserWindow({
     // icon: path.join(assetsPath, 'assets', 'icon.png'),
+    frame: false,
     width: 1100,
     height: 700,
-    backgroundColor: '#191622',
+    backgroundColor: '#fff',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

@@ -1,4 +1,5 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron';
+import { WindowAction } from './types';
 
 export const api = {
   /**
@@ -6,19 +7,19 @@ export const api = {
    * so they can interact with the main (electron) side
    * without security problems.
    *
-   * The function below can accessed using `window.Main.sendMessage`
+   * The function below can accessed using `window.Main.resizeWindow`
    */
 
-  sendMessage: (message: string) => {
-    ipcRenderer.send('message', message)
+  resizeWindow: (action: WindowAction) => {
+    ipcRenderer.send('windowAction', action);
   },
 
   /**
    * Provide an easier way to listen to events
    */
   on: (channel: string, callback: Function) => {
-    ipcRenderer.on(channel, (_, data) => callback(data))
-  }
-}
+    ipcRenderer.on(channel, (_, data) => callback(data));
+  },
+};
 
-contextBridge.exposeInMainWorld('Main', api)
+contextBridge.exposeInMainWorld('Main', api);

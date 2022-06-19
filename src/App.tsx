@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { TitleBar } from './components/TitleBar';
+import { useContext, useEffect } from 'react';
+import Layout from './components/Layout';
 import AuthContext from './context/AuthContext';
 import Login from './pages/Login';
 import './styles/global.scss';
@@ -7,5 +7,5 @@ import './styles/global.scss';
 export function App() {
   const authCtx = useContext(AuthContext);
 
-  return <>{authCtx.isLoggedIn ? <TitleBar /> : <Login />}</>;
+  return <>{authCtx.isLoggedIn ? <Layout /> : <Login />}</>;
 }

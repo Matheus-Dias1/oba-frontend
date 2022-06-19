@@ -1,0 +1,29 @@
+@import '../../../styles/pallete.scss';
+
+.nav {
+  background-color: $primary;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    background: none;
+    border: none;
+    padding: 0.5em;
+    display: grid;
+    place-items: center;
+    transition: background-color 100ms ease-in;
+
+    svg {
+      transform: scale(0.7);
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: $primary-light;
+    }
+
+    &[data-active='true'] {
+      background-color: $primary-light;
+    }
+  }
+}

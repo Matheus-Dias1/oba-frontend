@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import { WindowAction } from './types';
 
 let mainWindow: BrowserWindow | null;
@@ -14,7 +14,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 function createWindow() {
   mainWindow = new BrowserWindow({
     // icon: path.join(assetsPath, 'assets', 'icon.png'),
-    frame: false,
+    frame: true,
     width: 1100,
     height: 700,
     backgroundColor: '#fff',
@@ -74,3 +74,21 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+/** gambiarra maxima */
+const mainMenuTemplate = [
+  {
+    label: 'reload',
+    click: () => {
+      mainWindow?.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    },
+  },
+  {
+    label: 'devtools',
+    click: () => {
+      mainWindow?.webContents.openDevTools();
+    },
+  },
+];
+const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+Menu.setApplicationMenu(mainMenu);

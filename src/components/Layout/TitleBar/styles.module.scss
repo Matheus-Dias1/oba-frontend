@@ -1,4 +1,4 @@
-@import '../../styles/pallete.scss';
+@import '../../../styles/pallete.scss';
 
 .title-bar {
   background-color: $primary-darker;
@@ -17,7 +17,7 @@
     padding-top: 0.2em;
   }
 
-  .window-actions{
+  .window-actions {
     margin-left: auto;
     display: flex;
     gap: 0.5em;
@@ -30,7 +30,7 @@
       -webkit-app-region: no-drag;
     }
 
-    button:hover{
+    button:hover {
       cursor: pointer;
     }
   }

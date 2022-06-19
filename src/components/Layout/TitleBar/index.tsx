@@ -1,9 +1,9 @@
 import styles from './styles.module.scss';
-import MaximizeIcon from '../../assets/icons/window/maximize.svg';
-import MinimizeIcon from '../../assets/icons/window/minimize.svg';
-import RestoreIcon from '../../assets/icons/window/restore.svg';
-import CloseIcon from '../../assets/icons/window/close.svg';
-import { WindowAction } from '../../@types/bridge.d';
+import MaximizeIcon from '../../../assets/icons/window/maximize.svg';
+import MinimizeIcon from '../../../assets/icons/window/minimize.svg';
+import RestoreIcon from '../../../assets/icons/window/restore.svg';
+import CloseIcon from '../../../assets/icons/window/close.svg';
+import { WindowAction } from '../../../@types/bridge.d';
 import { useState } from 'react';
 
 export const TitleBar = () => {

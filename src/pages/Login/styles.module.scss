@@ -1,0 +1,62 @@
+@import '../../styles/pallete.scss';
+
+.container {
+  height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+.login-area {
+  margin-inline: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4em;
+  flex-direction: column;
+  flex-grow: 1;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+  }
+}
+
+.cover {
+  height: 105vh;
+  aspect-ratio: 973/1024;
+}
+
+.dragable {
+  position: absolute;
+  width: 100vw;
+  height: 40px;
+  top: 0;
+  left: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-app-region: drag;
+}
+
+.close-button {
+  background-color: $primary;
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border: none;
+  -webkit-app-region: no-drag;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  position: absolute;
+  top: 00px;
+  right: 0px;
+
+  .icon {
+    width: 1em;
+    fill: $offwhite;
+  }
+}

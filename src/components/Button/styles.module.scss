@@ -1,0 +1,52 @@
+@import '../../styles/pallete.scss';
+
+.button {
+  border: none;
+  min-height: 2.5em;
+  border-radius: 0.3em;
+  font-size: 1.2em;
+  padding-block: 0.4em;
+  font-weight: 800;
+  width: 100%;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &[data-loading='true'] {
+    cursor: auto;
+  }
+}
+
+.solid {
+  color: white;
+  background: $primary;
+
+  &[disabled] {
+    background-color: $lightgray;
+
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.leaked {
+  border: solid 3px $primary;
+  background: transparent;
+  color: $primary;
+
+  &[disabled] {
+    border-color: $lightgray;
+    color: $lightgray;
+
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.fit {
+  width: fit-content;
+  padding-inline: 2em;
+}

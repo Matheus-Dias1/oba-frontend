@@ -15,7 +15,7 @@ export const TitleBar = () => {
   };
   return (
     <div className={styles['title-bar']}>
-      <p>OBA</p>
+      <p>OBA GREEN</p>
       <div className={styles['window-actions']}>
         <button onClick={() => handleWindowAction(WindowAction.MINIMIZE)}>
           <MinimizeIcon className={styles.icon} />

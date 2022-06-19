@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap');
-
+@import './pallete.scss';
 
 /* Box sizing rules */
 *,
@@ -64,9 +64,9 @@ select {
 /* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
-   scroll-behavior: auto;
+    scroll-behavior: auto;
   }
-  
+
   *,
   *::before,
   *::after {
@@ -74,5 +74,24 @@ select {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/** CUSTOM COMPONENTS */
+input {
+  width: 100%;
+  border: none;
+  border-bottom: solid 2px $lightgray;
+  transition: border-bottom-color 200ms ease-in-out;
+  font-size: 1.2em;
+  font-weight: 500;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: $primary;
+  }
+
+  &::placeholder {
+    color: $lightgray;
   }
 }

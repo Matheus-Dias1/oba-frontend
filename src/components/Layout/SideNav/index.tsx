@@ -2,10 +2,14 @@ import styles from './styles.module.scss';
 import Batches from '../../../assets/icons/nav/batches.svg';
 import Orders from '../../../assets/icons/nav/orders.svg';
 import Products from '../../../assets/icons/nav/products.svg';
+import Logout from '../../../assets/icons/nav/logout.svg';
 import { Link, useLocation } from 'wouter';
+import { useContext } from 'react';
+import AuthContext from '../../../context/AuthContext';
 
 const SideNav = () => {
   const [location] = useLocation();
+  const authCtx = useContext(AuthContext);
 
   return (
     <div className={styles.nav}>
@@ -24,6 +28,14 @@ const SideNav = () => {
           <Products />
         </button>
       </Link>
+      <button
+        style={{ marginTop: 'auto' }}
+        onClick={() => {
+          authCtx.logout();
+        }}
+      >
+        <Logout />
+      </button>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
 @import './pallete.scss';
 
 /* Box sizing rules */
@@ -6,7 +6,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Remove default margin */
@@ -23,6 +23,14 @@ dd {
   margin: 0;
 }
 
+h1 {
+  color: $primary-darker;
+}
+
+h4 {
+  color: $gray;
+  font-weight: 400;
+}
 /* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
 ul[role='list'],
 ol[role='list'] {

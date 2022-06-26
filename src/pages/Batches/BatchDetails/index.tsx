@@ -3,6 +3,8 @@ import BackIcon from '../../../assets/icons/chevron-back.svg';
 import { BatchDetailI } from '../../../models/batchDetails';
 import { getAllSum } from '../../../utils/getAllSum';
 import { getSumByProduct } from '../../../utils/getSumByProduct';
+import { useState } from 'react';
+import ButtonSwitch from '../../../components/ButtonSwitch';
 
 const MOCK_BATCH: BatchDetailI = {
   _id: '62a5555f72a6d1d58a159abf',
@@ -100,21 +102,48 @@ const MOCK_BATCH: BatchDetailI = {
   ],
 };
 
+const SWITCH_OPTIONS = [
+  {
+    title: 'Resumo',
+    value: 'summary',
+    default: true,
+  },
+  {
+    title: 'Detalhes',
+    value: 'details',
+  },
+];
+
 interface PropsI {
   id: string;
 }
 
 const BatchDetails = ({ id }: PropsI) => {
+  const [batch, setBatch] = useState(MOCK_BATCH);
+  const [screen, setScreen] = useState('summary');
+
+  const batchNumber = '#' + `${batch.number}`.padStart(3, '0');
+  const batchDates = `${batch.startDate.toLocaleDateString()} - ${batch.endDate.toLocaleDateString()}`;
+
   console.log(getAllSum(MOCK_BATCH));
   console.log(getSumByProduct(MOCK_BATCH));
   return (
     <div className={styles.container}>
       <header>
-        <button>
+        <button className={styles['back-button']}>
           <BackIcon />
         </button>
         <div className={styles.info}>
-          <h1></h1>
+          <h1>{batchNumber}</h1>
+          <p>{batchDates}</p>
+        </div>
+        <div className={styles['button-switch']}>
+          <ButtonSwitch
+            options={SWITCH_OPTIONS}
+            onChange={value => {
+              setScreen(value);
+            }}
+          />
         </div>
       </header>
     </div>

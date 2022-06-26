@@ -21,6 +21,7 @@
 .solid {
   color: white;
   background: $primary;
+  border: solid 3px $primary;
 
   &[disabled] {
     background-color: $lightgray;

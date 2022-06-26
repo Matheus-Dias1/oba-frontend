@@ -4,4 +4,21 @@
   margin-inline: $page-margin;
   margin-top: $page-margin;
   flex-grow: 1;
+
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+
+    .back-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .button-switch {
+      margin-left: auto;
+      font-size: 0.8em;
+    }
+  }
 }

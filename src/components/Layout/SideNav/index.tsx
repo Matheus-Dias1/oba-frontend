@@ -14,17 +14,17 @@ const SideNav = () => {
   return (
     <div className={styles.nav}>
       <Link href="/batches">
-        <button data-active={location === '/batches'}>
+        <button data-active={location.includes('/batches')}>
           <Batches />
         </button>
       </Link>
       <Link href="/orders">
-        <button data-active={location === '/orders'}>
+        <button data-active={location.includes('/orders')}>
           <Orders />
         </button>
       </Link>
       <Link href="/products">
-        <button data-active={location === '/products'}>
+        <button data-active={location.includes('/products')}>
           <Products />
         </button>
       </Link>

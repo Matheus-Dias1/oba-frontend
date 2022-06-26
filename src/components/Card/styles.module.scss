@@ -5,4 +5,8 @@
   &[data-padding='true'] {
     padding: 0.8em;
   }
+
+  &[data-clickable='true'] {
+    cursor: pointer;
+  }
 }

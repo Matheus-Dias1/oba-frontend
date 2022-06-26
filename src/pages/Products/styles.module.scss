@@ -1,0 +1,7 @@
+@import '../../styles/pallete.scss';
+
+.container {
+  margin-inline: $page-margin;
+  margin-top: $page-margin;
+  flex-grow: 1;
+}

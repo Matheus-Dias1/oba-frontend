@@ -1,6 +1,7 @@
-import Card from '../../../components/Card';
-import Chip from '../../../components/Chip';
-import { getRandomID } from '../../../utils/randomID';
+import { useLocation } from 'wouter';
+import Card from '../../../../components/Card';
+import Chip from '../../../../components/Chip';
+import { getRandomID } from '../../../../utils/randomID';
 import styles from './styles.module.scss';
 
 interface PropsI {
@@ -11,9 +12,13 @@ interface PropsI {
 }
 
 const BatchCard = ({ startDate, endDate, number, items }: PropsI) => {
+  const [_, setLocation] = useLocation();
   const dateText = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+  const handleCardClick = () => {
+    setLocation('batches/oiee');
+  };
   return (
-    <Card>
+    <Card onClick={handleCardClick}>
       <div className={styles['batch-card-layout']}>
         <div>
           <h3>Data</h3>

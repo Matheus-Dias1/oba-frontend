@@ -1,7 +1,11 @@
-import './styles.module.scss';
+import styles from './styles.module.scss';
 
 const Orders = () => {
-  return <p>Orders</p>;
+  return (
+    <div className={styles.container}>
+      <p>Orders</p>
+    </div>
+  );
 };
 
 export default Orders;

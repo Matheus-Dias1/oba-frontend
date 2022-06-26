@@ -6,11 +6,13 @@ import { TitleBar } from './TitleBar';
 import styles from './styles.module.scss';
 import SideNav from './SideNav';
 import { useEffect } from 'react';
+import BatchDetails from '../../pages/Batches/BatchDetails';
+import { getRandomID } from '../../utils/randomID';
 
 const Layout = () => {
   const [_, setLocation] = useLocation();
   useEffect(() => {
-    setLocation('/batches');
+    setLocation(`/batches/${getRandomID()}`);
   }, []);
 
   return (
@@ -22,6 +24,9 @@ const Layout = () => {
           <Switch>
             <Route path="/batches">
               <Batches />
+            </Route>
+            <Route path="/batches/:id">
+              {params => <BatchDetails id={params.id} />}
             </Route>
             <Route path="/products">
               <Products />

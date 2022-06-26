@@ -1,7 +1,11 @@
-import './styles.module.scss';
+import styles from './styles.module.scss';
 
 const Products = () => {
-  return <p>Products</p>;
+  return (
+    <div className={styles.container}>
+      <p>Products</p>
+    </div>
+  );
 };
 
 export default Products;

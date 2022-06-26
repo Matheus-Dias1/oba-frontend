@@ -1,4 +1,4 @@
-import BatchCard from './BatchCard';
+import BatchCard from './components/BatchCard';
 import styles from './styles.module.scss';
 
 const MOCK_BATCH = [
@@ -6,7 +6,35 @@ const MOCK_BATCH = [
     startDate: new Date('2022-06-25T23:22:18.512Z'),
     endDate: new Date('2022-06-20T23:22:18.512Z'),
     number: 5,
-    items: ['banana', 'maçã', 'pera'],
+    items: [
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+      'banana',
+      'maçã',
+      'pera',
+    ],
   },
   {
     startDate: new Date('2022-06-25T23:22:18.512Z'),

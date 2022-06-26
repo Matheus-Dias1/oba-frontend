@@ -10,6 +10,12 @@
 
     main {
       flex-grow: 1;
+      display: flex;
+      max-height: calc(100vh - 28px);
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
   }
 }

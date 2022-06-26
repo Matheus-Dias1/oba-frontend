@@ -1,0 +1,12 @@
+@import '../../styles/pallete.scss';
+
+.chip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $primary-light;
+  border: 2px solid $primary-light;
+  padding: 0.2em 0.5em;
+  border-radius: 0.7em;
+  font-weight: 500;
+}

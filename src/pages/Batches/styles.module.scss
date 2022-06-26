@@ -3,4 +3,14 @@
 .container {
   margin-inline: $page-margin;
   margin-top: $page-margin;
+  flex-grow: 1;
+
+  .batch-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-top: 2em;
+    margin-inline: 0.2em;
+    padding-bottom: 2em;
+  }
 }

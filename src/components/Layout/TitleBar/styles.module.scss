@@ -2,8 +2,10 @@
 
 .title-bar {
   background-color: $primary-darker;
-  padding: 0.4em;
+  height: 28px;
+  padding-inline: 0.4em;
   display: flex;
+  align-items: center;
   user-select: none;
   -webkit-user-select: none;
   -webkit-app-region: drag;

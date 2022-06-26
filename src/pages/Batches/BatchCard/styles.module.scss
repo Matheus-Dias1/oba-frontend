@@ -1,0 +1,36 @@
+@import '../../../styles/pallete.scss';
+
+.batch-card-layout {
+  padding-right: 1em;
+  display: grid;
+  gap: 1em;
+  grid-template-columns: auto min-content;
+  align-items: center;
+
+  h2 {
+    color: $primary;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .button {
+    align-self: end;
+  }
+
+  h3 {
+    font-weight: 600;
+    font-size: 1.2em;
+    margin-bottom: 2px;
+  }
+
+  p {
+    font-weight: 300;
+    font-size: 1.2em;
+  }
+
+  .items {
+    display: flex;
+    gap: 0.5em;
+    flex-wrap: wrap;
+  }
+}

@@ -21,4 +21,23 @@
       font-size: 0.8em;
     }
   }
+
+  .prod-summary-container {
+    padding-top: 2em;
+    display: flex;
+    gap: 1em;
+    margin-bottom: 0.5em;
+
+    h2 {
+      font-weight: 600;
+    }
+
+    h2:nth-child(2) {
+      font-weight: 400;
+    }
+
+    & h2:first-child {
+      margin-right: auto;
+    }
+  }
 }

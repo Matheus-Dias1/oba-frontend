@@ -5,6 +5,7 @@ import { getAllSum } from '../../../utils/getAllSum';
 import { getSumByProduct } from '../../../utils/getSumByProduct';
 import { useState } from 'react';
 import ButtonSwitch from '../../../components/ButtonSwitch';
+import Table from '../../../components/Table';
 
 const MOCK_BATCH: BatchDetailI = {
   _id: '62a5555f72a6d1d58a159abf',
@@ -125,8 +126,17 @@ const BatchDetails = ({ id }: PropsI) => {
   const batchNumber = '#' + `${batch.number}`.padStart(3, '0');
   const batchDates = `${batch.startDate.toLocaleDateString()} - ${batch.endDate.toLocaleDateString()}`;
 
-  console.log(getAllSum(MOCK_BATCH));
-  console.log(getSumByProduct(MOCK_BATCH));
+  const sumData = getAllSum(batch);
+  const sumByProdData = getSumByProduct(batch);
+
+  const getTotal = (item: string) => {
+    const prod = sumData.find(p => p.item === item);
+    if (!prod) return '';
+    return `${prod.amount} ${prod.unit}`;
+  };
+
+  console.log(sumData);
+  console.log(sumByProdData);
   return (
     <div className={styles.container}>
       <header>
@@ -146,6 +156,36 @@ const BatchDetails = ({ id }: PropsI) => {
           />
         </div>
       </header>
+      {screen === 'summary' ? (
+        <div style={{ marginTop: '2em' }}>
+          <Table
+            data={sumData.map(d => ({
+              item: d.item,
+              quantidade: d.amount,
+              unidade: d.unit,
+            }))}
+          />
+        </div>
+      ) : (
+        sumByProdData.map(prod => {
+          return (
+            <>
+              <div className={styles['prod-summary-container']} key={prod.item}>
+                <h2>{prod.item}</h2>
+                <h2>Total:</h2>
+                <h2>{getTotal(prod.item)}</h2>
+              </div>
+              <Table
+                data={prod.clients.map(p => ({
+                  cliente: p.name,
+                  quantidade: p.amount,
+                  unidade: p.unit,
+                }))}
+              />
+            </>
+          );
+        })
+      )}
     </div>
   );
 };

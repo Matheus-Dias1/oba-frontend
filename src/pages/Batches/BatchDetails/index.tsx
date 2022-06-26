@@ -100,6 +100,76 @@ const MOCK_BATCH: BatchDetailI = {
         },
       ],
     },
+    {
+      _id: '62b7b7b15a158c496ce174aa',
+      client: 'Cliente Y',
+      createdAt: new Date('2022-06-26T01:34:41.890Z'),
+      deliverAt: new Date('2022-06-25T23:39:55.247Z'),
+      items: [
+        {
+          amount: 3,
+          measurementUnit: 'KG',
+          item: {
+            description: 'Maçã3',
+            defaultMeasurementUnit: 'KG',
+            conversions: [
+              {
+                measurementUnit: 'UN',
+                oneDefaultEquals: 10,
+              },
+              {
+                measurementUnit: 'CX',
+                oneDefaultEquals: 0.01,
+              },
+            ],
+          },
+        },
+        {
+          amount: 4,
+          measurementUnit: 'KG',
+          item: {
+            conversions: [],
+            description: 'maça22',
+            defaultMeasurementUnit: 'KG',
+          },
+        },
+      ],
+    },
+    {
+      _id: '62b7b7b15a158c496ce174aa',
+      client: 'Cliente Y',
+      createdAt: new Date('2022-06-26T01:34:41.890Z'),
+      deliverAt: new Date('2022-06-25T23:39:55.247Z'),
+      items: [
+        {
+          amount: 3,
+          measurementUnit: 'KG',
+          item: {
+            description: 'Maçã3',
+            defaultMeasurementUnit: 'KG',
+            conversions: [
+              {
+                measurementUnit: 'UN',
+                oneDefaultEquals: 10,
+              },
+              {
+                measurementUnit: 'CX',
+                oneDefaultEquals: 0.01,
+              },
+            ],
+          },
+        },
+        {
+          amount: 4,
+          measurementUnit: 'KG',
+          item: {
+            conversions: [],
+            description: 'maça22',
+            defaultMeasurementUnit: 'KG',
+          },
+        },
+      ],
+    },
   ],
 };
 
@@ -135,8 +205,6 @@ const BatchDetails = ({ id }: PropsI) => {
     return `${prod.amount} ${prod.unit}`;
   };
 
-  console.log(sumData);
-  console.log(sumByProdData);
   return (
     <div className={styles.container}>
       <header>
@@ -157,7 +225,7 @@ const BatchDetails = ({ id }: PropsI) => {
         </div>
       </header>
       {screen === 'summary' ? (
-        <div style={{ marginTop: '2em' }}>
+        <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
           <Table
             data={sumData.map(d => ({
               item: d.item,
@@ -167,24 +235,26 @@ const BatchDetails = ({ id }: PropsI) => {
           />
         </div>
       ) : (
-        sumByProdData.map(prod => {
-          return (
-            <>
-              <div className={styles['prod-summary-container']} key={prod.item}>
-                <h2>{prod.item}</h2>
-                <h2>Total:</h2>
-                <h2>{getTotal(prod.item)}</h2>
+        <div style={{ paddingBottom: '2em' }}>
+          {sumByProdData.map(prod => {
+            return (
+              <div key={prod.item}>
+                <div className={styles['prod-summary-container']}>
+                  <h2>{prod.item}</h2>
+                  <h2>Total:</h2>
+                  <h2>{getTotal(prod.item)}</h2>
+                </div>
+                <Table
+                  data={prod.clients.map(p => ({
+                    cliente: p.name,
+                    quantidade: p.amount,
+                    unidade: p.unit,
+                  }))}
+                />
               </div>
-              <Table
-                data={prod.clients.map(p => ({
-                  cliente: p.name,
-                  quantidade: p.amount,
-                  unidade: p.unit,
-                }))}
-              />
-            </>
-          );
-        })
+            );
+          })}
+        </div>
       )}
     </div>
   );

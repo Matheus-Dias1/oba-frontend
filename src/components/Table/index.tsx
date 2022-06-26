@@ -37,7 +37,7 @@ const Table = ({ data }: PropsI) => {
       </thead>
       <tbody>
         {data.map((row, i) => (
-          <tr>
+          <tr key={`${i}-${getRandomID()}`}>
             {headers.map((col, i) => (
               <td
                 key={`${col}-row-${i}-${getRandomID()}`}

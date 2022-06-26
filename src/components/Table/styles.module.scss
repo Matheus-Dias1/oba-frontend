@@ -1,6 +1,7 @@
 @import '../../styles/pallete.scss';
 
 .table {
+  transform: translate3d(0, 0, 0);
   width: 100%;
   border-radius: 0.5em 0.5em 0 0;
   overflow: hidden;

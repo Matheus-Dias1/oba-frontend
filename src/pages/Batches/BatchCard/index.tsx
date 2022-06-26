@@ -1,7 +1,7 @@
 import { useLocation } from 'wouter';
-import Card from '../../../../components/Card';
-import Chip from '../../../../components/Chip';
-import { getRandomID } from '../../../../utils/randomID';
+import Card from '../../../components/Card';
+import Chip from '../../../components/Chip';
+import { getRandomID } from '../../../utils/randomID';
 import styles from './styles.module.scss';
 
 interface PropsI {

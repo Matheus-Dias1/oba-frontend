@@ -1,4 +1,4 @@
-import BatchCard from './components/BatchCard';
+import BatchCard from './BatchCard';
 import styles from './styles.module.scss';
 
 const MOCK_BATCH = [

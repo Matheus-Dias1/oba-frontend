@@ -6,6 +6,7 @@ import { getSumByProduct } from '../../../utils/getSumByProduct';
 import { useState } from 'react';
 import ButtonSwitch from '../../../components/ButtonSwitch';
 import Table from '../../../components/Table';
+import { useLocation } from 'wouter';
 
 const MOCK_BATCH: BatchDetailI = {
   _id: '62a5555f72a6d1d58a159abf',
@@ -193,6 +194,8 @@ const BatchDetails = ({ id }: PropsI) => {
   const [batch, setBatch] = useState(MOCK_BATCH);
   const [screen, setScreen] = useState('summary');
 
+  const [_, setLocation] = useLocation();
+
   const batchNumber = '#' + `${batch.number}`.padStart(3, '0');
   const batchDates = `${batch.startDate.toLocaleDateString()} - ${batch.endDate.toLocaleDateString()}`;
 
@@ -208,7 +211,12 @@ const BatchDetails = ({ id }: PropsI) => {
   return (
     <div className={styles.container}>
       <header>
-        <button className={styles['back-button']}>
+        <button
+          className={styles['back-button']}
+          onClick={() => {
+            setLocation('/batches');
+          }}
+        >
           <BackIcon />
         </button>
         <div className={styles.info}>

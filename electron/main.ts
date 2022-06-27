@@ -15,10 +15,10 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     // icon: path.join(assetsPath, 'assets', 'icon.png'),
     frame: true,
-    width: 1280,
-    height: 720,
-    minWidth: 1280,
-    minHeight: 720,
+    width: 1100,
+    height: 700,
+    minWidth: 1100,
+    minHeight: 700,
     backgroundColor: '#fff',
     webPreferences: {
       nodeIntegration: false,

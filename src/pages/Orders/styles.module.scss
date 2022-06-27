@@ -4,4 +4,15 @@
   margin-inline: $page-margin;
   margin-top: $page-margin;
   flex-grow: 1;
+  position: relative;
+
+  .order-list {
+    margin-top: 2em;
+  }
+
+  .add-button {
+    position: absolute;
+    bottom: $page-margin;
+    right: 0;
+  }
 }

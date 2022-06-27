@@ -1,0 +1,32 @@
+@import '../../styles/pallete.scss';
+
+.button {
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  height: 2.8em;
+  width: 2.8em;
+  display: grid;
+  place-items: center;
+
+  &.red {
+    background-color: $red;
+  }
+
+  &.primary {
+    background-color: $primary;
+  }
+
+  &[disabled] {
+    background-color: $lightgray;
+
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &.loading {
+    cursor: not-allowed;
+  }
+}

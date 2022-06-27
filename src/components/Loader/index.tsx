@@ -1,22 +1,32 @@
 import styles from './styles.module.scss';
 
 interface PropsI {
-  size?: number;
+  type?: 'ring' | 'ellipsis';
 }
 
-const Loader = ({ size: sizeP }: PropsI) => {
-  const size = sizeP || 80;
+const Loader = ({ type: typeP }: PropsI) => {
+  const type = typeP || 'ellipsis';
 
-  return (
-    <div className={styles.clip}>
-      <div className={styles['lds-ellipsis']} data-size={size}>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-  );
+  switch (type) {
+    case 'ellipsis':
+      return (
+        <div className={styles.clip}>
+          <div className={styles['lds-ellipsis']}>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      );
+    case 'ring':
+      return (
+        <div className={styles['lds-ring']}>
+          <div></div>
+          <div></div>
+        </div>
+      );
+  }
 };
 
 export default Loader;

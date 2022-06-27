@@ -6,7 +6,16 @@ interface PropsI {
 }
 
 const Chip = ({ title, amount }: PropsI) => {
-  return <div className={styles.chip}>{title}</div>;
+  const containerClasses = [styles.chip, !amount ? styles.padding : ''].join(
+    ' '
+  );
+  const titleClasses = [amount ? styles.padding : ''].join(' ');
+  return (
+    <div className={containerClasses}>
+      <div className={titleClasses}>{title}</div>
+      {amount ? <div className={styles.amount}>{amount}</div> : <></>}
+    </div>
+  );
 };
 
 export default Chip;

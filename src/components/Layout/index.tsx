@@ -8,11 +8,12 @@ import SideNav from './SideNav';
 import { useEffect } from 'react';
 import BatchDetails from '../../pages/Batches/BatchDetails';
 import { getRandomID } from '../../utils/randomID';
+import Order from '../../pages/Orders/Order';
 
 const Layout = () => {
   const [_, setLocation] = useLocation();
   useEffect(() => {
-    setLocation(`/batches/${getRandomID()}`);
+    setLocation(`/orders`);
   }, []);
 
   return (
@@ -33,6 +34,9 @@ const Layout = () => {
             </Route>
             <Route path="/orders">
               <Orders />
+            </Route>
+            <Route path="/orders/:id">
+              {params => <Order id={params.id} />}
             </Route>
           </Switch>
         </main>

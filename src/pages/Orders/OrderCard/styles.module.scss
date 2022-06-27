@@ -1,0 +1,56 @@
+@import '../../../styles/pallete.scss';
+
+.info {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 0.3em;
+
+  .date {
+    justify-self: end;
+  }
+
+  h3 {
+    font-weight: 600;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+    font-size: 1.1em;
+    font-weight: 300;
+
+    h3 {
+      font-size: 1em;
+      color: $primary;
+    }
+  }
+}
+
+.item-chips-container {
+  justify-content: space-between;
+  margin-top: 1em;
+  display: flex;
+
+  .item-chips {
+    display: flex;
+    flex-grow: 1;
+    gap: 0.5em;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1em;
+
+    button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}

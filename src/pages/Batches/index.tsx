@@ -1,3 +1,4 @@
+import { getRandomID } from '../../utils/randomID';
 import BatchCard from './BatchCard';
 import styles from './styles.module.scss';
 
@@ -83,6 +84,7 @@ const Batches = () => {
         {MOCK_BATCH.map(MOCK_BATCH => {
           return (
             <BatchCard
+              key={getRandomID()}
               startDate={MOCK_BATCH.startDate}
               endDate={MOCK_BATCH.endDate}
               number={MOCK_BATCH.number}

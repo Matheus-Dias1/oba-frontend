@@ -7,6 +7,7 @@ import { useState } from 'react';
 import ButtonSwitch from '../../../components/ButtonSwitch';
 import Table from '../../../components/Table';
 import { useLocation } from 'wouter';
+import { getRandomID } from '../../../utils/randomID';
 
 const MOCK_BATCH: BatchDetailI = {
   _id: '62a5555f72a6d1d58a159abf',
@@ -236,6 +237,7 @@ const BatchDetails = ({ id }: PropsI) => {
         <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
           <Table
             data={sumData.map(d => ({
+              id: `${d.item}-${getRandomID()}`,
               item: d.item,
               quantidade: d.amount,
               unidade: d.unit,
@@ -254,6 +256,7 @@ const BatchDetails = ({ id }: PropsI) => {
                 </div>
                 <Table
                   data={prod.clients.map(p => ({
+                    id: `${p.name}-${getRandomID()}`,
                     cliente: p.name,
                     quantidade: p.amount,
                     unidade: p.unit,

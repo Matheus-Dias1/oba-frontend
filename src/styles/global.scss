@@ -93,6 +93,7 @@ input {
   transition: border-bottom-color 200ms ease-in-out;
   font-size: 1.2em;
   font-weight: 500;
+  padding: 0 8px 4px 8px;
 
   &:focus {
     outline: none;
@@ -101,5 +102,10 @@ input {
 
   &::placeholder {
     color: $lightgray;
+  }
+
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }

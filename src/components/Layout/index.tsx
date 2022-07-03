@@ -7,13 +7,12 @@ import styles from './styles.module.scss';
 import SideNav from './SideNav';
 import { useEffect } from 'react';
 import BatchDetails from '../../pages/Batches/BatchDetails';
-import { getRandomID } from '../../utils/randomID';
 import Order from '../../pages/Orders/Order';
 
 const Layout = () => {
   const [_, setLocation] = useLocation();
   useEffect(() => {
-    setLocation(`/orders`);
+    setLocation(`/products`);
   }, []);
 
   return (

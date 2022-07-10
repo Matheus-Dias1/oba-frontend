@@ -1,0 +1,18 @@
+.container {
+  width: 700px;
+}
+.content {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+
+  form {
+    display: flex;
+    gap: 1em;
+  }
+
+  Button {
+    margin-left: auto;
+  }
+}

@@ -1,5 +1,9 @@
+import { useState } from 'react';
+import ButtonRound from '../../components/ButtonRound';
+import Modal from '../../components/Modal';
 import { getRandomID } from '../../utils/randomID';
 import BatchCard from './BatchCard';
+import NewBatch from './NewBatch';
 import styles from './styles.module.scss';
 
 const MOCK_BATCH = [
@@ -76,19 +80,50 @@ const MOCK_BATCH = [
 ];
 
 const Batches = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [batches, setBatches] = useState(MOCK_BATCH);
+
+  const handleNewBatch = async (start: Date, end: Date) => {
+    batches.unshift({
+      items: [],
+      endDate: end,
+      startDate: start,
+      number: batches.length + 1,
+    });
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setModalOpen(false);
+  };
+
   return (
     <div className={styles.container}>
+      {modalOpen && (
+        <Modal
+          onClose={() => {
+            setModalOpen(false);
+          }}
+        >
+          <NewBatch next={batches.length + 1} onAdd={handleNewBatch} />
+        </Modal>
+      )}
+      <div className={styles.actions}>
+        <ButtonRound
+          onClick={() => {
+            setModalOpen(true);
+          }}
+          type="add"
+        />
+      </div>
       <h1>Lotes</h1>
       <h4>Resumo geral de cada lote, incluindo itens de cada pedido</h4>
       <div className={styles['batch-list']}>
-        {MOCK_BATCH.map(MOCK_BATCH => {
+        {batches.map(batches => {
           return (
             <BatchCard
               key={getRandomID()}
-              startDate={MOCK_BATCH.startDate}
-              endDate={MOCK_BATCH.endDate}
-              number={MOCK_BATCH.number}
-              items={MOCK_BATCH.items}
+              startDate={batches.startDate}
+              endDate={batches.endDate}
+              number={batches.number}
+              items={batches.items}
             />
           );
         })}

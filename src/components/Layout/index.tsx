@@ -1,11 +1,11 @@
 import { Route, Switch, useLocation } from 'wouter';
+import { useEffect } from 'react';
 import Batches from '../../pages/Batches';
 import Orders from '../../pages/Orders';
 import Products from '../../pages/Products';
 import { TitleBar } from './TitleBar';
 import styles from './styles.module.scss';
 import SideNav from './SideNav';
-import { useEffect } from 'react';
 import BatchDetails from '../../pages/Batches/BatchDetails';
 import Order from '../../pages/Orders/Order';
 import Product from '../../pages/Products/Product';
@@ -13,7 +13,7 @@ import Product from '../../pages/Products/Product';
 const Layout = () => {
   const [_, setLocation] = useLocation();
   useEffect(() => {
-    setLocation(`/products/new`);
+    setLocation(`/batches`);
   }, []);
 
   return (

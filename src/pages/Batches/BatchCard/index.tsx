@@ -27,11 +27,15 @@ const BatchCard = ({ startDate, endDate, number, items }: PropsI) => {
         <h2>{`${number}`.padStart(3, '0')}</h2>
         <div>
           <h3>Items</h3>
-          <div className={styles.items}>
-            {items.map((item: string) => (
-              <Chip title={item} key={`${item}-${getRandomID()}`} />
-            ))}
-          </div>
+          {items.length ? (
+            <div className={styles.items}>
+              {items.map((item: string) => (
+                <Chip title={item} key={`${item}-${getRandomID()}`} />
+              ))}
+            </div>
+          ) : (
+            <p>Ainda não há pedidos para esse lote</p>
+          )}
         </div>
         <h2 className={styles.button}>&gt;</h2>
       </div>

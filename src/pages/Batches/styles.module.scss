@@ -13,4 +13,11 @@
     margin-inline: 0.2em;
     padding-bottom: 2em;
   }
+
+  .actions {
+    position: absolute;
+    right: $page-margin;
+    bottom: $page-margin;
+    z-index: 1;
+  }
 }

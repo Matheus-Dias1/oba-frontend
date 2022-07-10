@@ -1,4 +1,10 @@
 import { useCallback, useState, ReactNode, createContext } from 'react';
+import { SessionResponseT } from '../queries/session/models';
+import { createSession } from '../queries/session/session';
+export interface LoginReturnT {
+  status?: 'SUCCESS' | 'FAILED';
+  message?: string;
+}
 
 const AuthContext = createContext({
   token: '',
@@ -11,33 +17,33 @@ interface IProps {
   children: ReactNode;
 }
 
-export interface LoginReturnT {
-  status?: string;
-  message?: string;
-}
-
 export const AuthContextProvider = ({ children }: IProps) => {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const isLoggedIn = !!token;
 
-  const login = useCallback((user: string, pass: string) => {
+  const login = useCallback(async (user: string, pass: string) => {
     // logica de login
-    if (user === '' && pass === '') {
-      localStorage.setItem('token', 'token_valido');
-      setToken('token_valido');
-    } else
+    try {
+      const res: SessionResponseT = await createSession(user, pass);
+      localStorage.setItem('token', res.token!);
+      setToken(res.token!);
+      return {
+        status: 'SUCCESS',
+      } as LoginReturnT;
+    } catch (err) {
+      let message;
+      if (err instanceof Error) message = err.message;
+      else message = String(err);
       return {
         status: 'FAILED',
-        message:
-          'INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS INVALID CREDENTIALS ',
+        message,
       } as LoginReturnT;
-    return {
-      status: 'SUCCESS',
-    } as LoginReturnT;
+    }
   }, []);
 
   const logout = useCallback(() => {
     setToken('');
+    localStorage.removeItem('token');
   }, []);
 
   const initValue = {

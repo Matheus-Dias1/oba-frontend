@@ -4,6 +4,8 @@
   margin-inline: $page-margin;
   margin-top: $page-margin;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 
   .batch-list {
     display: flex;
@@ -19,5 +21,19 @@
     right: $page-margin;
     bottom: $page-margin;
     z-index: 1;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    input {
+      width: 200px;
+    }
+  }
+
+  Button {
+    align-self: center;
   }
 }

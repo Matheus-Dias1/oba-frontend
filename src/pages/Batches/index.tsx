@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import Button from '../../components/Button';
 import ButtonRound from '../../components/ButtonRound';
 import Modal from '../../components/Modal';
+import Spacer from '../../components/Spacer';
 import { getRandomID } from '../../utils/randomID';
 import BatchCard from './BatchCard';
 import NewBatch from './NewBatch';
@@ -80,8 +82,12 @@ const MOCK_BATCH = [
 ];
 
 const Batches = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [search, setSearch] = useState('');
   const [batches, setBatches] = useState(MOCK_BATCH);
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleNewBatch = async (start: Date, end: Date) => {
     batches.unshift({
@@ -113,8 +119,20 @@ const Batches = () => {
           type="add"
         />
       </div>
-      <h1>Lotes</h1>
-      <h4>Resumo geral de cada lote, incluindo itens de cada pedido</h4>
+      <div className={styles.header}>
+        <div>
+          <h1>Lotes</h1>
+          <h4>Resumo geral de cada lote, incluindo itens de cada pedido</h4>
+        </div>
+        <input
+          type="text"
+          value={search}
+          onChange={e => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Buscar lote"
+        />{' '}
+      </div>
       <div className={styles['batch-list']}>
         {batches.map(batches => {
           return (
@@ -128,6 +146,14 @@ const Batches = () => {
           );
         })}
       </div>
+      <Button
+        onClick={() => {}}
+        loading={loadingMore}
+        fit
+        title="Carregar mais"
+        variant="leaked"
+      />
+      <Spacer />
     </div>
   );
 };

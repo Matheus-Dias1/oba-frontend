@@ -5,7 +5,7 @@ import logo from '../../assets/visuals/logo.png';
 import cover from '../../assets/visuals/login-image.png';
 import CloseIcon from '../../assets/icons/window/close.svg';
 import { WindowAction } from '../../../electron/types';
-import AuthContext from '../../context/AuthContext';
+import AuthContext, { LoginReturnT } from '../../context/AuthContext';
 
 const Login = () => {
   const authCtx = useContext(AuthContext);
@@ -14,10 +14,15 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    // setLoading(true);
-    authCtx.login(user, password);
-    // setLoading(false);
+  const [error, setError] = useState('');
+
+  const handleLogin = async () => {
+    if (!user || !password) return;
+    setLoading(true);
+    setError('');
+    const res: LoginReturnT = await authCtx.login(user.trim(), password);
+    if (res.status === 'FAILED') setError(res.message!);
+    setLoading(false);
   };
 
   return (
@@ -56,6 +61,7 @@ const Login = () => {
               }}
             />
             <Button loading={loading} title={'Entrar'} onClick={handleLogin} />
+            {error && <p className={styles['error-message']}>{error}</p>}
           </form>
         </div>
         <img src={cover} alt="" className={styles.cover} />

@@ -8,11 +8,12 @@ import SideNav from './SideNav';
 import { useEffect } from 'react';
 import BatchDetails from '../../pages/Batches/BatchDetails';
 import Order from '../../pages/Orders/Order';
+import Product from '../../pages/Products/Product';
 
 const Layout = () => {
   const [_, setLocation] = useLocation();
   useEffect(() => {
-    setLocation(`/products`);
+    setLocation(`/products/new`);
   }, []);
 
   return (
@@ -30,6 +31,9 @@ const Layout = () => {
             </Route>
             <Route path="/products">
               <Products />
+            </Route>
+            <Route path="/products/:id">
+              {params => <Product id={params.id} />}
             </Route>
             <Route path="/orders">
               <Orders />

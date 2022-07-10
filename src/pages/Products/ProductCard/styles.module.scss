@@ -1,0 +1,29 @@
+@import '../../../styles/pallete.scss';
+
+.card {
+  display: flex;
+  gap: 0.5em;
+
+  h3 {
+    font-weight: 600;
+  }
+
+  p {
+    margin-left: auto;
+  }
+
+  button {
+    background: none;
+    border: none;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+
+    svg {
+      width: 1.2em;
+      path {
+        fill: $primary;
+      }
+    }
+  }
+}

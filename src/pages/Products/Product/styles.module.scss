@@ -1,0 +1,55 @@
+@import '../../../styles/pallete.scss';
+
+.container {
+  margin-inline: $page-margin;
+  margin-top: $page-margin;
+  flex-grow: 1;
+
+  h1 {
+    margin-bottom: 1em;
+  }
+
+  .info {
+    display: flex;
+    gap: 1em;
+
+    & > :first-child {
+      flex: 1 1 60%;
+    }
+
+    & > :last-child {
+      flex: 1 1 40%;
+    }
+  }
+
+  h2 {
+    margin-top: 2em;
+    color: $primary-darker;
+  }
+
+  .conversions-form {
+    margin-top: 1em;
+    display: grid;
+    grid-template-columns: 70px max-content 70px 70px 100px;
+    gap: 1em;
+    align-items: center;
+
+    .separator {
+      height: 2px;
+      width: 100%;
+      background-color: $primary-darker;
+    }
+
+    p {
+      font-size: 1.2em;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5em;
+    position: absolute;
+    bottom: $page-margin;
+    right: $page-margin;
+  }
+}

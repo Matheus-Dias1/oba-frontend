@@ -21,10 +21,8 @@ const NewBatch = ({ next, onAdd }: PropsI) => {
     if (!startDate || !endDate) return;
     setLoading(true);
     const start = new Date(startDate);
-    console.log(start.toISOString());
     const end = new Date(endDate);
     start.setHours(28);
-    console.log(start.toISOString());
     end.setHours(28);
     onAdd(start, end);
   };

@@ -1,4 +1,4 @@
-import { useRef, useState, MutableRefObject } from 'react';
+import { useRef, useState, MutableRefObject, useEffect } from 'react';
 import SelectPaginate from '../../../components/Select/SelectPaginate';
 import SelectSimple from '../../../components/Select/SelectSimple';
 import { loadMoreBatches } from './utils/fetchBatchOptions';
@@ -9,6 +9,9 @@ import Table from '../../../components/Table';
 import { loadMoreProducts } from './utils/fetchProductOptions';
 import ButtonRound from '../../../components/ButtonRound';
 import { useLocation } from 'wouter';
+import { getOrder } from '../../../queries/orders/getOrders';
+import { OrderI } from '../../../queries/orders/models';
+import { saveOrder } from '../../../queries/orders/setOrder';
 
 type Product = {
   id: string;
@@ -33,8 +36,10 @@ interface PropsI {
 }
 
 const Order = ({ id }: PropsI) => {
+  const [loading, setLoading] = useState(true);
+
   const [client, setClient] = useState('');
-  const [batch, setBatch] = useState('');
+  const [batch, setBatch] = useState<Option | null>(null);
   const [deliverAt, setDeliverAt] = useState('');
 
   // product input
@@ -51,6 +56,34 @@ const Order = ({ id }: PropsI) => {
 
   // location
   const [_, setLocation] = useLocation();
+
+  // init data if is product editing
+  const init = async () => {
+    if (id === 'new') return;
+    const order: OrderI = await getOrder(id);
+    if (order) {
+      setClient(order.client);
+      setBatch({ value: order.batch._id, label: `${order.batch.number}` });
+      dateRef.current.type = 'date';
+      setDeliverAt(new Date(order.deliverAt).toISOString().split('T')[0]);
+      setProdlist(
+        order.items.map(item => ({
+          amount: item.amount,
+          unit: item.measurementUnit,
+          product: {
+            id: item.item._id,
+            conversions: item.item.conversions,
+            description: item.item.description,
+            defaultMeasurementUnit: item.item.defaultMeasurementUnit,
+          },
+        }))
+      );
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    init();
+  }, []);
 
   const getAvailableUnits = () => {
     if (!product) return undefined;
@@ -72,6 +105,7 @@ const Order = ({ id }: PropsI) => {
     setProduct(null);
     setEditing(-1);
   };
+
   const onProdConfirm = () => {
     if (!product || !amount || !unit) return;
     if (editing >= 0) {
@@ -146,6 +180,31 @@ const Order = ({ id }: PropsI) => {
     });
     resetNewProd();
   };
+
+  const handleConfirm = async () => {
+    if (!client || !batch || !deliverAt || !prodList.length) return;
+    setLoading(true);
+    const deliverDate = new Date(deliverAt);
+    deliverDate.setHours(28);
+    const body = {
+      client,
+      batch: batch?.value,
+      deliverAt: deliverDate.toISOString(),
+      items: prodList.map(x => ({
+        item: x.product.id,
+        amount: x.amount,
+        measurementUnit: x.unit,
+      })),
+    };
+
+    try {
+      await saveOrder(body, id === 'new' ? undefined : id);
+      setLocation('/orders');
+    } catch (err) {
+      alert(`Erro ao salvar pedido: ${err}`);
+      setLoading(false);
+    }
+  };
   const getTitle = () => (id === 'new' ? 'Novo pedido' : 'Alterar pedido');
   return (
     <div className={styles.container}>
@@ -156,7 +215,7 @@ const Order = ({ id }: PropsI) => {
           }}
           type="cancel"
         />
-        <ButtonRound onClick={() => {}} type="ok" />
+        <ButtonRound onClick={handleConfirm} type="ok" loading={loading} />
       </div>
       <h1>{getTitle()}</h1>
       <form
@@ -176,8 +235,9 @@ const Order = ({ id }: PropsI) => {
           <div>
             <SelectPaginate
               loadOptions={loadMoreBatches}
+              value={batch}
               onChange={e => {
-                setBatch(e ? e.toString() : '');
+                setBatch(e);
               }}
               placeholder="Lote"
             />

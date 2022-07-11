@@ -5,14 +5,24 @@
   margin-top: $page-margin;
   flex-grow: 1;
   position: relative;
+  display: flex;
+  flex-direction: column;
 
   .order-list {
     margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding-bottom: 2em;
   }
 
   .add-button {
     position: absolute;
     bottom: $page-margin;
     right: 0;
+  }
+
+  Button {
+    align-self: center;
   }
 }

@@ -1,71 +1,52 @@
-import { useState } from 'react';
+import { useInfiniteQuery } from 'react-query';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import ButtonRound from '../../components/ButtonRound';
 import OrderCard from './OrderCard';
 import styles from './styles.module.scss';
-
-const MOCK_ORDERS = [
-  {
-    client: 'Cliente X',
-    batch: 3,
-    createdAt: new Date(),
-    deliveryAt: new Date(),
-    items: [
-      {
-        description: 'banana',
-        amount: '30 kg',
-      },
-      {
-        description: 'maça',
-        amount: '20 un',
-      },
-      {
-        description: 'cebola',
-        amount: '30 kg',
-      },
-      {
-        description: 'banana',
-        amount: '30 kg',
-      },
-      {
-        description: 'maça',
-        amount: '20 un',
-      },
-      {
-        description: 'cebola',
-        amount: '30 kg',
-      },
-      {
-        description: 'banana',
-        amount: '30 kg',
-      },
-      {
-        description: 'maça',
-        amount: '20 un',
-      },
-      {
-        description: 'cebola',
-        amount: '30 kg',
-      },
-      {
-        description: 'banana',
-        amount: '30 kg',
-      },
-      {
-        description: 'maça',
-        amount: '20 un',
-      },
-      {
-        description: 'cebola',
-        amount: '30 kg',
-      },
-    ],
-  },
-];
+import { getOrders } from '../../queries/orders/getOrders';
+import { OrderI } from '../../queries/orders/models';
+import Button from '../../components/Button';
+import Spacer from '../../components/Spacer';
 
 const Orders = () => {
-  const [orders, setOrders] = useState(MOCK_ORDERS);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [orders, setOrders] = useState<OrderI[]>([]);
   const [_, setLocation] = useLocation();
+
+  const { data, status, fetchNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery(
+      ['batches'],
+      async ({ pageParam = '' }) => await getOrders(pageParam),
+      {
+        getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
+      }
+    );
+
+  useEffect(() => {
+    if (status === 'success' && !isFetching) {
+      const lastPage = data.pages.length - 1;
+      setHasNextPage(data.pages[lastPage].pageInfo.hasNextPage);
+      setOrders(old => {
+        const oldOrders = JSON.parse(JSON.stringify(old));
+        if (lastPage >= 0) {
+          oldOrders.push(...data.pages[lastPage].edges.map((x: any) => x.node));
+          return oldOrders;
+        }
+        return [];
+      });
+    }
+  }, [status, isFetching]);
+
+  const getItems = (order: OrderI) => {
+    const items: string[] = [];
+    order.items.forEach(item => {
+      if (!items.includes(item.item.description))
+        items.push(item.item.description);
+    });
+
+    return items;
+  };
 
   return (
     <div className={styles.container}>
@@ -82,18 +63,30 @@ const Orders = () => {
 
       <div className={styles['order-list']}>
         {orders.map(order => (
-          <div key={`${order.batch}-${order.createdAt.getTime()}`}>
+          <div key={order._id}>
             <OrderCard
-              batch={`${order.batch}-${order.createdAt.getTime()}`}
-              batchNumber={order.batch}
+              id={order._id}
+              batchNumber={order.batch.number}
               client={order.client}
-              createdAt={order.createdAt}
-              deliverAt={order.deliveryAt}
-              items={order.items}
+              createdAt={new Date(order.createdAt)}
+              deliverAt={new Date(order.deliverAt)}
+              items={getItems(order)}
             />
           </div>
         ))}
       </div>
+      {hasNextPage && (
+        <Button
+          onClick={() => {
+            fetchNextPage();
+          }}
+          loading={isFetchingNextPage}
+          fit
+          title="Carregar mais"
+          variant="leaked"
+        />
+      )}
+      <Spacer />
     </div>
   );
 };

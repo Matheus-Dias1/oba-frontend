@@ -29,6 +29,7 @@ const Product = ({ id }: PropsI) => {
   const handleEnterKey = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') pushNewConversion();
   };
+
   const pushNewConversion = () => {
     if (!defaultAmount || !convAmount || !convUnit) return;
     setConversions(conversions => {

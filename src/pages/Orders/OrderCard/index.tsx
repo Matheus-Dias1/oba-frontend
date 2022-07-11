@@ -8,19 +8,16 @@ import { useLocation } from 'wouter';
 
 interface PropsI {
   client: string;
-  batch: string;
+  id: string;
   batchNumber: number;
   createdAt: Date;
   deliverAt: Date;
-  items: {
-    description: string;
-    amount: string;
-  }[];
+  items: string[];
 }
 
 const OrderCard = ({
   client,
-  batch,
+  id,
   batchNumber,
   createdAt,
   deliverAt,
@@ -45,18 +42,14 @@ const OrderCard = ({
       <div className={styles['item-chips-container']}>
         <div className={styles['item-chips']}>
           {items.map(i => (
-            <Chip
-              title={i.description}
-              amount={i.amount}
-              key={`${i.description}-${getRandomID()}`}
-            />
+            <Chip title={i} key={`${i}-${getRandomID()}`} />
           ))}
         </div>
         <div className={styles.actions}>
           {/* <PDFIcon /> */}
           <button
             onClick={() => {
-              setLocation(`/orders/${batch}`);
+              setLocation(`/orders/${id}`);
             }}
           >
             <EditIcon />

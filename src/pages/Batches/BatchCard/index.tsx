@@ -5,17 +5,20 @@ import { getRandomID } from '../../../utils/randomID';
 import styles from './styles.module.scss';
 
 interface PropsI {
+  id: string;
   startDate: Date;
   endDate: Date;
   number: number;
   items: string[];
 }
 
-const BatchCard = ({ startDate, endDate, number, items }: PropsI) => {
+const BatchCard = ({ startDate, endDate, number, items, id }: PropsI) => {
   const [_, setLocation] = useLocation();
-  const dateText = `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`;
+  const dateText = `${startDate.toLocaleDateString(
+    'pt-BR'
+  )} - ${endDate.toLocaleDateString('pt-BR')}`;
   const handleCardClick = () => {
-    setLocation('batches/oiee');
+    setLocation(`batches/${id}`);
   };
   return (
     <Card onClick={handleCardClick}>

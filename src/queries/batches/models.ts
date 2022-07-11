@@ -1,13 +1,13 @@
 export interface BatchDetailI {
   _id: string;
   number: number;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   orders: {
     _id: string;
     client: string;
-    createdAt: Date;
-    deliverAt: Date;
+    createdAt: string;
+    deliverAt: string;
     items: {
       amount: number;
       measurementUnit: string;

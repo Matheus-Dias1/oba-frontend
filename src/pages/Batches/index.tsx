@@ -1,102 +1,80 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useInfiniteQuery } from 'react-query';
 import Button from '../../components/Button';
 import ButtonRound from '../../components/ButtonRound';
+import Loader from '../../components/Loader';
 import Modal from '../../components/Modal';
 import Spacer from '../../components/Spacer';
-import { getRandomID } from '../../utils/randomID';
+import { getBatches } from '../../queries/batches/getBatches';
+import { BatchDetailI } from '../../queries/batches/models';
+import { newBatch } from '../../queries/batches/newBatch';
 import BatchCard from './BatchCard';
 import NewBatch from './NewBatch';
 import styles from './styles.module.scss';
 
-const MOCK_BATCH = [
-  {
-    startDate: new Date('2022-06-25T23:22:18.512Z'),
-    endDate: new Date('2022-06-20T23:22:18.512Z'),
-    number: 5,
-    items: [
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-      'banana',
-      'maçã',
-      'pera',
-    ],
-  },
-  {
-    startDate: new Date('2022-06-25T23:22:18.512Z'),
-    endDate: new Date('2022-06-20T23:22:18.512Z'),
-    number: 5,
-    items: ['banana', 'maçã', 'pera'],
-  },
-  {
-    startDate: new Date('2022-06-25T23:22:18.512Z'),
-    endDate: new Date('2022-06-20T23:22:18.512Z'),
-    number: 5,
-    items: ['banana', 'maçã', 'pera'],
-  },
-  {
-    startDate: new Date('2022-06-25T23:22:18.512Z'),
-    endDate: new Date('2022-06-20T23:22:18.512Z'),
-    number: 5,
-    items: ['banana', 'maçã', 'pera'],
-  },
-  {
-    startDate: new Date('2022-06-25T23:22:18.512Z'),
-    endDate: new Date('2022-06-20T23:22:18.512Z'),
-    number: 5,
-    items: ['banana', 'maçã', 'pera'],
-  },
-  {
-    startDate: new Date('2022-06-25T23:22:18.512Z'),
-    endDate: new Date('2022-06-20T23:22:18.512Z'),
-    number: 5,
-    items: ['banana', 'maçã', 'pera'],
-  },
-  {
-    startDate: new Date('2022-06-25T23:22:18.512Z'),
-    endDate: new Date('2022-06-20T23:22:18.512Z'),
-    number: 5,
-    items: ['banana', 'maçã', 'pera'],
-  },
-];
-
 const Batches = () => {
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [search, setSearch] = useState('');
-  const [batches, setBatches] = useState(MOCK_BATCH);
-
   const [modalOpen, setModalOpen] = useState(false);
+  const [batches, setBatches] = useState<BatchDetailI[]>([]);
+  const [hasNextPage, setHasNextPage] = useState(false);
+
+  const {
+    data,
+    status,
+    fetchNextPage,
+    isFetchingNextPage,
+    refetch,
+    isFetching,
+  } = useInfiniteQuery(
+    ['batches'],
+    async ({ pageParam = '' }) => await getBatches(pageParam, search),
+    {
+      getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
+    }
+  );
+
+  useEffect(() => {
+    refetch();
+  }, [search]);
+
+  useEffect(() => {
+    if (status === 'success' && !isFetching) {
+      const lastPage = data.pages.length - 1;
+      setHasNextPage(data.pages[lastPage].pageInfo.hasNextPage);
+      setBatches(old => {
+        const oldBatches = search ? [] : JSON.parse(JSON.stringify(old));
+        if (lastPage >= 0) {
+          oldBatches.push(
+            ...data.pages[lastPage].edges.map((x: any) => x.node)
+          );
+          return oldBatches;
+        }
+        return [];
+      });
+    }
+  }, [status, isFetching]);
+
+  const getItems = (batch: BatchDetailI) => {
+    const items: string[] = [];
+    batch.orders.forEach(order => {
+      order.items.forEach(item => {
+        if (!items.includes(item.item.description))
+          items.push(item.item.description);
+      });
+    });
+
+    return items;
+  };
 
   const handleNewBatch = async (start: Date, end: Date) => {
     batches.unshift({
-      items: [],
-      endDate: end,
-      startDate: start,
+      _id: '',
+      orders: [],
+      endDate: end.toISOString(),
+      startDate: start.toISOString(),
       number: batches.length + 1,
     });
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await newBatch(start.toISOString(), end.toISOString());
     setModalOpen(false);
   };
 
@@ -131,28 +109,37 @@ const Batches = () => {
             setSearch(e.target.value);
           }}
           placeholder="Buscar lote"
-        />{' '}
+        />
       </div>
-      <div className={styles['batch-list']}>
-        {batches.map(batches => {
-          return (
-            <BatchCard
-              key={getRandomID()}
-              startDate={batches.startDate}
-              endDate={batches.endDate}
-              number={batches.number}
-              items={batches.items}
-            />
-          );
-        })}
-      </div>
-      <Button
-        onClick={() => {}}
-        loading={loadingMore}
-        fit
-        title="Carregar mais"
-        variant="leaked"
-      />
+      {status === 'success' ? (
+        <div className={styles['batch-list']}>
+          {batches.map(batch => {
+            return (
+              <BatchCard
+                key={batch._id}
+                id={batch._id}
+                startDate={new Date(batch.startDate)}
+                endDate={new Date(batch.endDate)}
+                number={batch.number}
+                items={getItems(batch)}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <Loader type="ellipsis" />
+      )}
+      {hasNextPage && (
+        <Button
+          onClick={() => {
+            fetchNextPage();
+          }}
+          loading={isFetchingNextPage}
+          fit
+          title="Carregar mais"
+          variant="leaked"
+        />
+      )}
       <Spacer />
     </div>
   );

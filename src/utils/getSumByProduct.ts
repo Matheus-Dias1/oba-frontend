@@ -1,4 +1,4 @@
-import { BatchDetailI } from '../models/batchDetails';
+import { BatchDetailI } from '../queries/batches/models';
 
 export const getSumByProduct = (batch: BatchDetailI) => {
   const products: {

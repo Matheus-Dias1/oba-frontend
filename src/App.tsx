@@ -5,7 +5,13 @@ import Login from './pages/Login';
 import './styles/global.scss';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 export function App() {
   const authCtx = useContext(AuthContext);

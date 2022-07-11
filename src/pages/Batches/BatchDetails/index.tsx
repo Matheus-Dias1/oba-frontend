@@ -1,6 +1,7 @@
 import styles from './styles.module.scss';
 import BackIcon from '../../../assets/icons/chevron-back.svg';
-import { BatchDetailI } from '../../../models/batchDetails';
+import { BatchDetailI } from '../../../queries/batches/models';
+import { useQuery } from 'react-query';
 import { getAllSum } from '../../../utils/getAllSum';
 import { getSumByProduct } from '../../../utils/getSumByProduct';
 import { useState } from 'react';
@@ -8,172 +9,7 @@ import ButtonSwitch from '../../../components/ButtonSwitch';
 import Table from '../../../components/Table';
 import { useLocation } from 'wouter';
 import { getRandomID } from '../../../utils/randomID';
-
-const MOCK_BATCH: BatchDetailI = {
-  _id: '62a5555f72a6d1d58a159abf',
-  number: 3,
-  startDate: new Date('2022-06-16T02:52:39.106Z'),
-  endDate: new Date('2022-06-18T02:52:45.381Z'),
-  orders: [
-    {
-      _id: '62a559b3d0a4a2ed57561ff3',
-      client: 'Cliente X',
-      createdAt: new Date('2022-06-12T03:12:51.561Z'),
-      deliverAt: new Date('2022-06-15T23:39:55.247Z'),
-      items: [
-        {
-          amount: 1,
-          measurementUnit: 'KG',
-          item: {
-            description: 'Maçã01',
-            conversions: [],
-            defaultMeasurementUnit: 'KG',
-          },
-        },
-        {
-          amount: 2,
-          measurementUnit: 'KG',
-          item: {
-            conversions: [],
-            description: 'maça22',
-            defaultMeasurementUnit: 'KG',
-          },
-        },
-      ],
-    },
-    {
-      _id: '62b7b7b15a158c496ce174aa',
-      client: 'Cliente Y',
-      createdAt: new Date('2022-06-26T01:34:41.890Z'),
-      deliverAt: new Date('2022-06-25T23:39:55.247Z'),
-      items: [
-        {
-          amount: 3,
-          measurementUnit: 'KG',
-          item: {
-            description: 'Maçã3',
-            defaultMeasurementUnit: 'KG',
-            conversions: [
-              {
-                measurementUnit: 'UN',
-                oneDefaultEquals: 10,
-              },
-              {
-                measurementUnit: 'CX',
-                oneDefaultEquals: 0.01,
-              },
-            ],
-          },
-        },
-        {
-          amount: 4,
-          measurementUnit: 'KG',
-          item: {
-            conversions: [],
-            description: 'maça22',
-            defaultMeasurementUnit: 'KG',
-          },
-        },
-      ],
-    },
-    {
-      _id: '62b7ba57d073471656440fb9',
-      client: 'Cliente Y',
-      createdAt: new Date('2022-06-26T01:45:59.433Z'),
-      deliverAt: new Date('2022-06-25T23:39:55.247Z'),
-      items: [
-        {
-          amount: 2,
-          measurementUnit: 'CX',
-          item: {
-            description: 'Maçã3',
-            defaultMeasurementUnit: 'KG',
-            conversions: [
-              {
-                measurementUnit: 'UN',
-                oneDefaultEquals: 10,
-              },
-              {
-                measurementUnit: 'CX',
-                oneDefaultEquals: 0.01,
-              },
-            ],
-          },
-        },
-      ],
-    },
-    {
-      _id: '62b7b7b15a158c496ce174aa',
-      client: 'Cliente Y',
-      createdAt: new Date('2022-06-26T01:34:41.890Z'),
-      deliverAt: new Date('2022-06-25T23:39:55.247Z'),
-      items: [
-        {
-          amount: 3,
-          measurementUnit: 'KG',
-          item: {
-            description: 'Maçã3',
-            defaultMeasurementUnit: 'KG',
-            conversions: [
-              {
-                measurementUnit: 'UN',
-                oneDefaultEquals: 10,
-              },
-              {
-                measurementUnit: 'CX',
-                oneDefaultEquals: 0.01,
-              },
-            ],
-          },
-        },
-        {
-          amount: 4,
-          measurementUnit: 'KG',
-          item: {
-            conversions: [],
-            description: 'maça22',
-            defaultMeasurementUnit: 'KG',
-          },
-        },
-      ],
-    },
-    {
-      _id: '62b7b7b15a158c496ce174aa',
-      client: 'Cliente Y',
-      createdAt: new Date('2022-06-26T01:34:41.890Z'),
-      deliverAt: new Date('2022-06-25T23:39:55.247Z'),
-      items: [
-        {
-          amount: 3,
-          measurementUnit: 'KG',
-          item: {
-            description: 'Maçã3',
-            defaultMeasurementUnit: 'KG',
-            conversions: [
-              {
-                measurementUnit: 'UN',
-                oneDefaultEquals: 10,
-              },
-              {
-                measurementUnit: 'CX',
-                oneDefaultEquals: 0.01,
-              },
-            ],
-          },
-        },
-        {
-          amount: 4,
-          measurementUnit: 'KG',
-          item: {
-            conversions: [],
-            description: 'maça22',
-            defaultMeasurementUnit: 'KG',
-          },
-        },
-      ],
-    },
-  ],
-};
+import { getBatch } from '../../../queries/batches/getBatches';
 
 const SWITCH_OPTIONS = [
   {
@@ -192,13 +28,19 @@ interface PropsI {
 }
 
 const BatchDetails = ({ id }: PropsI) => {
-  const [batch, setBatch] = useState(MOCK_BATCH);
   const [screen, setScreen] = useState('summary');
+
+  const { data, status } = useQuery(['batch'], async () => await getBatch(id));
+  const batch: BatchDetailI = data;
 
   const [_, setLocation] = useLocation();
 
+  if (status === 'loading') return <></>;
+
   const batchNumber = '#' + `${batch.number}`.padStart(3, '0');
-  const batchDates = `${batch.startDate.toLocaleDateString()} - ${batch.endDate.toLocaleDateString()}`;
+  const batchDates = `${new Date(batch.startDate).toLocaleDateString(
+    'pt-BR'
+  )} - ${new Date(batch.endDate).toLocaleDateString('pt-BR')}`;
 
   const sumData = getAllSum(batch);
   const sumByProdData = getSumByProduct(batch);

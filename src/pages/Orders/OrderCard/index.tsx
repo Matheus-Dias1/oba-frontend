@@ -33,13 +33,13 @@ const OrderCard = ({
       <div className={styles.info}>
         <h3 className={styles.client}>{client}</h3>
         <span className={styles.date}>
-          CRIADO EM <h3>{createdAt.toLocaleDateString()}</h3>
+          CRIADO EM <h3>{createdAt.toLocaleDateString('pt-BR')}</h3>
         </span>
         <span>
           LOTE <h3>{`${batchNumber}`.padStart(3, '0')}</h3>
         </span>
         <span className={styles.date}>
-          ENTREGA EM <h3>{deliverAt.toLocaleDateString()}</h3>
+          ENTREGA EM <h3>{deliverAt.toLocaleDateString('pt-BR')}</h3>
         </span>
       </div>
       <div className={styles['item-chips-container']}>

@@ -26,7 +26,7 @@ const Batches = () => {
     refetch,
     isFetching,
   } = useInfiniteQuery(
-    ['batches'],
+    ['batches', search],
     async ({ pageParam = '' }) => await getBatches(pageParam, search),
     {
       getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
@@ -34,23 +34,14 @@ const Batches = () => {
   );
 
   useEffect(() => {
-    refetch();
-  }, [search]);
-
-  useEffect(() => {
     if (status === 'success' && !isFetching) {
       const lastPage = data.pages.length - 1;
       setHasNextPage(data.pages[lastPage].pageInfo.hasNextPage);
-      setBatches(old => {
-        const oldBatches = search ? [] : JSON.parse(JSON.stringify(old));
-        if (lastPage >= 0) {
-          oldBatches.push(
-            ...data.pages[lastPage].edges.map((x: any) => x.node)
-          );
-          return oldBatches;
-        }
-        return [];
+      const updatedBatches: BatchDetailI[] = [];
+      data.pages.forEach(page => {
+        updatedBatches.push(...page.edges.map((x: any) => x.node));
       });
+      setBatches(updatedBatches);
     }
   }, [status, isFetching]);
 

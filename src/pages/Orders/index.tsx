@@ -60,7 +60,6 @@ const Orders = () => {
       </div>
       <h1>Pedidos</h1>
       <h4>Detalhes de cada pedido</h4>
-
       <div className={styles['order-list']}>
         {orders.map(order => (
           <div key={order._id}>

@@ -1,44 +1,56 @@
+import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
+import { useInfiniteQuery } from 'react-query';
+import Button from '../../components/Button';
 import ButtonRound from '../../components/ButtonRound';
-import { getRandomID } from '../../utils/randomID';
+import { ProductI } from '../../queries/products/models';
 import ProductCard from './ProductCard';
 import styles from './styles.module.scss';
-
-const MOCK_PRODUCTS = [
-  {
-    id: getRandomID(),
-    description: 'Maçã',
-    defaultUnit: 'UN',
-    units: ['CX', 'KG'],
-  },
-  {
-    id: getRandomID(),
-    description: 'Banana',
-    defaultUnit: 'UN',
-    units: ['CX', 'KG'],
-  },
-  {
-    id: getRandomID(),
-    description: 'Melancia',
-    defaultUnit: 'UN',
-    units: ['CX', 'KG'],
-  },
-  {
-    id: getRandomID(),
-    description: 'Pera',
-    defaultUnit: 'UN',
-    units: ['CX', 'KG'],
-  },
-  {
-    id: getRandomID(),
-    description: 'Uva',
-    defaultUnit: 'UN',
-    units: ['CX', 'KG'],
-  },
-];
+import { getProducts } from '../../queries/products/getProducts';
+import { getRandomID } from '../../utils/randomID';
 
 const Products = () => {
   const [_, setLocation] = useLocation();
+
+  const [search, setSearch] = useState('');
+  const [hasNextPage, setHasNextPage] = useState(false);
+
+  const [products, setProducts] = useState<ProductI[]>([]);
+
+  const {
+    data,
+    status,
+    fetchNextPage,
+    isFetchingNextPage,
+    refetch,
+    isFetching,
+  } = useInfiniteQuery(
+    ['products', search],
+    async ({ pageParam = '' }) => await getProducts(pageParam, search),
+    {
+      getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
+    }
+  );
+
+  useEffect(() => {
+    if (status === 'success' && !isFetching) {
+      const lastPage = data.pages.length - 1;
+      setHasNextPage(data.pages[lastPage].pageInfo.hasNextPage);
+      const updatedProducts: ProductI[] = [];
+      data.pages.forEach(page => {
+        updatedProducts.push(...page.edges.map((x: any) => x.node));
+      });
+      setProducts(updatedProducts);
+    }
+  }, [status, isFetching]);
+
+  const getUnits = (product: ProductI) => {
+    const units: string[] = [];
+    if (!product.conversions) return [];
+    product.conversions.forEach(c => units.push(c.measurementUnit));
+    return units;
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles['add-product']}>
@@ -49,18 +61,40 @@ const Products = () => {
           type="add"
         />
       </div>
-      <h1>Produtos</h1>
-      <h4>Adicione e altere dados de produtos</h4>
+      <div className={styles.header}>
+        <div>
+          <h1>Produtos</h1>
+          <h4>Adicione e altere dados de produtos</h4>
+        </div>
+        <input
+          type="text"
+          value={search}
+          onChange={e => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Buscar produto"
+        />
+      </div>
       <div className={styles['product-list']}>
-        {MOCK_PRODUCTS.map(p => (
+        {products.map(p => (
           <ProductCard
-            defaultUnit={p.defaultUnit}
+            defaultUnit={p.defaultMeasurementUnit}
             description={p.description}
-            id={p.id}
-            key={p.id}
-            units={p.units}
+            id={p._id || getRandomID()}
+            key={p._id || getRandomID()}
+            units={getUnits(p)}
           />
         ))}
+        {hasNextPage && (
+          <Button
+            onClick={() => {
+              fetchNextPage();
+            }}
+            title="Carregar mais"
+            variant="leaked"
+            loading={isFetchingNextPage}
+          />
+        )}
       </div>
     </div>
   );

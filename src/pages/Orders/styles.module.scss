@@ -4,7 +4,6 @@
   margin-inline: $page-margin;
   margin-top: $page-margin;
   flex-grow: 1;
-  position: relative;
   display: flex;
   flex-direction: column;
 
@@ -18,8 +17,9 @@
 
   .add-button {
     position: absolute;
+    right: $page-margin;
     bottom: $page-margin;
-    right: 0;
+    z-index: 1;
   }
 
   Button {

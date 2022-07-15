@@ -30,7 +30,7 @@
   .conversions-form {
     margin-top: 1em;
     display: grid;
-    grid-template-columns: 70px max-content 70px 70px 100px;
+    grid-template-columns: 70px max-content 70px 70px 100px 30px;
     gap: 1em;
     align-items: center;
 
@@ -42,6 +42,22 @@
 
     p {
       font-size: 1.2em;
+    }
+
+    button {
+      border: none;
+      background: none;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+
+      svg {
+        width: 1.2em;
+
+        path {
+          fill: $red;
+        }
+      }
     }
   }
 

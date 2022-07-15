@@ -1,7 +1,11 @@
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import ButtonRound from '../../../components/ButtonRound';
-import { getRandomID } from '../../../utils/randomID';
+import { getProduct } from '../../../queries/products/getProducts';
+import { ProductI } from '../../../queries/products/models';
+import { setProduct } from '../../../queries/products/setProduct';
+import DeleteIcon from '../../../assets/icons/actions/trash.svg';
+import AddIcon from '../../../assets/icons/actions/confirm.svg';
 import styles from './styles.module.scss';
 
 type Conversions = {
@@ -17,6 +21,7 @@ interface PropsI {
 const Product = ({ id }: PropsI) => {
   const [_, setLocation] = useLocation();
 
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [unit, setUnit] = useState('');
 
@@ -25,6 +30,28 @@ const Product = ({ id }: PropsI) => {
   const [convUnit, setConvUnit] = useState('');
 
   const [conversions, setConversions] = useState<Conversions>([]);
+
+  const init = async () => {
+    if (id === 'new') return;
+    try {
+      const product: ProductI = await getProduct(id);
+      setName(product.description);
+      setUnit(product.defaultMeasurementUnit);
+      setConversions(
+        product.conversions.map(conv => ({
+          defaultAmount: '1',
+          convAmount: `${conv.oneDefaultEquals}`,
+          unit: conv.measurementUnit,
+        }))
+      );
+    } catch (err) {
+      alert(`Erro ao carregar produto: ${err}`);
+    }
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
 
   const handleEnterKey = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') pushNewConversion();
@@ -59,10 +86,31 @@ const Product = ({ id }: PropsI) => {
     });
   };
 
-  const onSubmit = () => {
-    console.log(name);
-    console.log(unit);
-    console.log(conversions);
+  const removeConversion = (i: number) => {
+    setConversions(c => {
+      const convs = JSON.parse(JSON.stringify(c));
+      convs.splice(i, 1);
+      return convs;
+    });
+  };
+
+  const onSubmit = async () => {
+    if (!name || !unit) return;
+    setLoading(true);
+    await setProduct(
+      {
+        description: name,
+        defaultMeasurementUnit: unit,
+        conversions: conversions.map(c => ({
+          measurementUnit: c.unit,
+          oneDefaultEquals:
+            parseFloat(c.convAmount) / parseFloat(c.defaultAmount),
+        })),
+      },
+      id !== 'new' ? id : undefined
+    );
+    setLoading(false);
+    setLocation('/products');
   };
 
   const getTitle = () => (id === 'new' ? 'Novo produto' : 'Alterar produto');
@@ -71,11 +119,11 @@ const Product = ({ id }: PropsI) => {
       <div className={styles.actions}>
         <ButtonRound
           onClick={() => {
-            setLocation('/orders');
+            setLocation('/products');
           }}
           type="cancel"
         />
-        <ButtonRound onClick={onSubmit} type="ok" />
+        <ButtonRound onClick={onSubmit} type="ok" loading={loading} />
       </div>
       <h1>{getTitle()}</h1>
       <form className={styles.info}>
@@ -134,10 +182,7 @@ const Product = ({ id }: PropsI) => {
             />
           </form>
           {conversions.map((conv, i) => (
-            <form
-              className={styles['conversions-form']}
-              key={`${conv.unit}-${getRandomID()}`}
-            >
+            <form className={styles['conversions-form']} key={i}>
               <input
                 type="number"
                 value={conv.defaultAmount}
@@ -170,6 +215,9 @@ const Product = ({ id }: PropsI) => {
                 onKeyUp={e => handleEnterKey(e)}
                 placeholder="UN"
               />
+              <button type="button" onClick={() => removeConversion(i)}>
+                <DeleteIcon />
+              </button>
             </form>
           ))}
         </>

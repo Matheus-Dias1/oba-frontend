@@ -1,5 +1,5 @@
 export interface ProductI {
-  _id: string;
+  _id?: string;
   description: string;
   defaultMeasurementUnit: string;
   conversions: {

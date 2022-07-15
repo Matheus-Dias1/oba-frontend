@@ -3,6 +3,7 @@
 .card {
   display: flex;
   gap: 0.5em;
+  align-items: center;
 
   h3 {
     font-weight: 600;
@@ -10,6 +11,7 @@
 
   p {
     margin-left: auto;
+    font-size: 1.2em;
   }
 
   button {

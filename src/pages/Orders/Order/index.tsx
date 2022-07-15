@@ -36,7 +36,7 @@ interface PropsI {
 }
 
 const Order = ({ id }: PropsI) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [client, setClient] = useState('');
   const [batch, setBatch] = useState<Option | null>(null);
@@ -60,6 +60,7 @@ const Order = ({ id }: PropsI) => {
   // init data if is product editing
   const init = async () => {
     if (id === 'new') return;
+    setLoading(true);
     const order: OrderI = await getOrder(id);
     if (order) {
       setClient(order.client);

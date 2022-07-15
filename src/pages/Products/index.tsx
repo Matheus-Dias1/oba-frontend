@@ -19,20 +19,14 @@ const Products = () => {
 
   const [products, setProducts] = useState<ProductI[]>([]);
 
-  const {
-    data,
-    status,
-    fetchNextPage,
-    isFetchingNextPage,
-    refetch,
-    isFetching,
-  } = useInfiniteQuery(
-    ['products', search],
-    async ({ pageParam = '' }) => await getProducts(pageParam, search),
-    {
-      getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
-    }
-  );
+  const { data, status, fetchNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery(
+      ['products', search],
+      async ({ pageParam = '' }) => await getProducts(pageParam, search),
+      {
+        getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
+      }
+    );
 
   useEffect(() => {
     if (status === 'success' && !isFetching) {

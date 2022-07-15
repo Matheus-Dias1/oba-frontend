@@ -2,12 +2,13 @@ import { useInfiniteQuery } from 'react-query';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import ButtonRound from '../../components/ButtonRound';
-import OrderCard from './OrderCard';
 import styles from './styles.module.scss';
 import { getOrders } from '../../queries/orders/getOrders';
 import { OrderI } from '../../queries/orders/models';
 import Button from '../../components/Button';
 import Spacer from '../../components/Spacer';
+import Loader from '../../components/Loader';
+import OrderCard from './OrderCard';
 
 const Orders = () => {
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -74,6 +75,12 @@ const Orders = () => {
           </div>
         ))}
       </div>
+      {status === 'loading' && (
+        <div>
+          <Spacer />
+          <Loader color="primary" type="ellipsis" />
+        </div>
+      )}
       {hasNextPage && (
         <Button
           onClick={() => {

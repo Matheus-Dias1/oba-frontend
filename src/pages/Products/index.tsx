@@ -8,6 +8,8 @@ import ProductCard from './ProductCard';
 import styles from './styles.module.scss';
 import { getProducts } from '../../queries/products/getProducts';
 import { getRandomID } from '../../utils/randomID';
+import Loader from '../../components/Loader';
+import Spacer from '../../components/Spacer';
 
 const Products = () => {
   const [_, setLocation] = useLocation();
@@ -96,6 +98,8 @@ const Products = () => {
           />
         )}
       </div>
+      <Spacer />
+      {status === 'loading' && <Loader color="primary" type="ellipsis" />}
     </div>
   );
 };

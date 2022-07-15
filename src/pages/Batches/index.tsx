@@ -112,13 +112,12 @@ const Batches = () => {
           })}
         </div>
       )}
-      {status === 'loading' ||
-        (isFetching && (
-          <>
-            <Spacer />
-            <Loader type="ellipsis" color="primary" />
-          </>
-        ))}
+      {isFetching && (
+        <>
+          <Spacer />
+          <Loader type="ellipsis" color="primary" />
+        </>
+      )}
       {hasNextPage && (
         <Button
           onClick={() => {

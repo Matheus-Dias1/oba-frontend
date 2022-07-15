@@ -75,7 +75,7 @@ const Orders = () => {
           </div>
         ))}
       </div>
-      {status === 'loading' && (
+      {isFetching && (
         <div>
           <Spacer />
           <Loader color="primary" type="ellipsis" />

@@ -13,7 +13,7 @@ const assetsPath =
 function createWindow() {
   mainWindow = new BrowserWindow({
     icon: `${assetsPath}/assets/icon.png`,
-    frame: true,
+    frame: false,
     width: 1100,
     height: 700,
     minWidth: 1100,

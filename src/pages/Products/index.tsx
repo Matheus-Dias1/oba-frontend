@@ -93,7 +93,7 @@ const Products = () => {
         )}
       </div>
       <Spacer />
-      {status === 'loading' && <Loader color="primary" type="ellipsis" />}
+      {isFetching && <Loader color="primary" type="ellipsis" />}
     </div>
   );
 };

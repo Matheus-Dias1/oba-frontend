@@ -18,20 +18,14 @@ const Batches = () => {
   const [batches, setBatches] = useState<BatchDetailI[]>([]);
   const [hasNextPage, setHasNextPage] = useState(false);
 
-  const {
-    data,
-    status,
-    fetchNextPage,
-    isFetchingNextPage,
-    refetch,
-    isFetching,
-  } = useInfiniteQuery(
-    ['batches', search],
-    async ({ pageParam = '' }) => await getBatches(pageParam, search),
-    {
-      getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
-    }
-  );
+  const { data, status, fetchNextPage, isFetchingNextPage, isFetching } =
+    useInfiniteQuery(
+      ['batches', search],
+      async ({ pageParam = '' }) => await getBatches(pageParam, search),
+      {
+        getNextPageParam: lastPage => lastPage.pageInfo.endCursor,
+      }
+    );
 
   useEffect(() => {
     if (status === 'success' && !isFetching) {
@@ -102,7 +96,7 @@ const Batches = () => {
           placeholder="Buscar lote"
         />
       </div>
-      {status === 'success' ? (
+      {status === 'success' && (
         <div className={styles['batch-list']}>
           {batches.map(batch => {
             return (
@@ -117,9 +111,14 @@ const Batches = () => {
             );
           })}
         </div>
-      ) : (
-        <Loader type="ellipsis" />
       )}
+      {status === 'loading' ||
+        (isFetching && (
+          <>
+            <Spacer />
+            <Loader type="ellipsis" color="primary" />
+          </>
+        ))}
       {hasNextPage && (
         <Button
           onClick={() => {

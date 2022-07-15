@@ -6,6 +6,10 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
+
+  &[data-color='primary'] .lds-ellipsis div {
+    background: $primary;
+  }
 }
 
 .lds-ellipsis {
@@ -71,6 +75,11 @@
   position: relative;
   width: 30px;
   height: 30px;
+
+  &[data-color='primary'].lds-ring div {
+    border: 3px solid $primary;
+    border-color: $primary transparent transparent transparent;
+  }
 }
 .lds-ring div {
   box-sizing: border-box;

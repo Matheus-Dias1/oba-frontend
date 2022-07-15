@@ -8,8 +8,15 @@ import SideNav from './SideNav';
 import BatchDetails from '../../pages/Batches/BatchDetails';
 import Order from '../../pages/Orders/Order';
 import Product from '../../pages/Products/Product';
+import { useEffect } from 'react';
 
 const Layout = () => {
+  const [_, setLocation] = useLocation();
+
+  useEffect(() => {
+    setLocation('/batches');
+  }, []);
+
   return (
     <div className={styles.container}>
       <TitleBar />

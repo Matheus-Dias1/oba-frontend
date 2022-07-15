@@ -12,6 +12,8 @@ import { getRandomID } from '../../../utils/randomID';
 import { getBatch } from '../../../queries/batches/getBatches';
 import ButtonRound from '../../../components/ButtonRound';
 import { downloadSummary } from '../../../queries/batches/download';
+import Loader from '../../../components/Loader';
+import Spacer from '../../../components/Spacer';
 
 const SWITCH_OPTIONS = [
   {
@@ -33,19 +35,20 @@ const BatchDetails = ({ id }: PropsI) => {
   const [screen, setScreen] = useState('summary');
 
   const { data, status } = useQuery(['batch'], async () => await getBatch(id));
+  const isLoading = status === 'success';
   const batch: BatchDetailI = data;
 
   const [_, setLocation] = useLocation();
 
-  if (status === 'loading') return <></>;
+  const batchNumber = isLoading ? '#' + `${batch.number}`.padStart(3, '0') : '';
+  const batchDates = isLoading
+    ? `${new Date(batch.startDate).toLocaleDateString('pt-BR')} - ${new Date(
+        batch.endDate
+      ).toLocaleDateString('pt-BR')}`
+    : '';
 
-  const batchNumber = '#' + `${batch.number}`.padStart(3, '0');
-  const batchDates = `${new Date(batch.startDate).toLocaleDateString(
-    'pt-BR'
-  )} - ${new Date(batch.endDate).toLocaleDateString('pt-BR')}`;
-
-  const sumData = getAllSum(batch);
-  const sumByProdData = getSumByProduct(batch);
+  const sumData = isLoading ? getAllSum(batch) : [];
+  const sumByProdData = isLoading ? getSumByProduct(batch) : [];
 
   const getTotal = (item: string) => {
     const prod = sumData.find(p => p.item === item);
@@ -89,7 +92,13 @@ const BatchDetails = ({ id }: PropsI) => {
           />
         </div>
       </header>
-      {screen === 'summary' ? (
+      {status === 'loading' && (
+        <>
+          <Spacer />
+          <Loader type="ellipsis" color="primary" />
+        </>
+      )}
+      {screen === 'summary' && isLoading && (
         <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
           <Table
             data={sumData.map(d => ({
@@ -100,7 +109,8 @@ const BatchDetails = ({ id }: PropsI) => {
             }))}
           />
         </div>
-      ) : (
+      )}
+      {screen === 'details' && isLoading && (
         <div style={{ paddingBottom: '2em' }}>
           {sumByProdData.map(prod => {
             return (

@@ -1,5 +1,4 @@
 import { Route, Switch, useLocation } from 'wouter';
-import { useEffect } from 'react';
 import Batches from '../../pages/Batches';
 import Orders from '../../pages/Orders';
 import Products from '../../pages/Products';
@@ -11,11 +10,6 @@ import Order from '../../pages/Orders/Order';
 import Product from '../../pages/Products/Product';
 
 const Layout = () => {
-  const [_, setLocation] = useLocation();
-  useEffect(() => {
-    setLocation(`/batches`);
-  }, []);
-
   return (
     <div className={styles.container}>
       <TitleBar />

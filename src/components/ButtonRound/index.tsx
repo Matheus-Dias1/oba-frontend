@@ -2,11 +2,12 @@ import styles from './styles.module.scss';
 import CancelIcon from '../../assets/icons/actions/cancel.svg';
 import ConfirmIcon from '../../assets/icons/actions/confirm.svg';
 import AddIcon from '../../assets/icons/actions/add.svg';
+import DownloadIcon from '../../assets/icons/actions/download.svg';
 import { ReactNode } from 'react';
 import Loader from '../Loader';
 
 interface PropsI {
-  type: 'cancel' | 'ok' | 'add';
+  type: 'cancel' | 'ok' | 'add' | 'download';
   onClick: () => void;
   disabled?: boolean;
   loading?: boolean;
@@ -21,6 +22,8 @@ const ButtonRound = ({ type, onClick, disabled, loading }: PropsI) => {
         return [<ConfirmIcon />, 'primary'];
       case 'add':
         return [<AddIcon />, 'primary'];
+      case 'download':
+        return [<DownloadIcon />, 'primary'];
     }
   };
 

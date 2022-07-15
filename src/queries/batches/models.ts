@@ -12,6 +12,7 @@ export interface BatchDetailI {
       amount: number;
       measurementUnit: string;
       item: {
+        _id: string;
         description: string;
         defaultMeasurementUnit: string;
         conversions: {

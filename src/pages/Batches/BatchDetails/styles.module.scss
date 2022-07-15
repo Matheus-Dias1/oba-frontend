@@ -40,4 +40,10 @@
       margin-right: auto;
     }
   }
+
+  .actions {
+    position: absolute;
+    bottom: $page-margin;
+    right: $page-margin;
+  }
 }

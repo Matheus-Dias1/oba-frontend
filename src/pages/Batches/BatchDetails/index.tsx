@@ -10,6 +10,8 @@ import Table from '../../../components/Table';
 import { useLocation } from 'wouter';
 import { getRandomID } from '../../../utils/randomID';
 import { getBatch } from '../../../queries/batches/getBatches';
+import ButtonRound from '../../../components/ButtonRound';
+import { downloadSummary } from '../../../queries/batches/download';
 
 const SWITCH_OPTIONS = [
   {
@@ -51,8 +53,20 @@ const BatchDetails = ({ id }: PropsI) => {
     return `${prod.amount} ${prod.unit}`;
   };
 
+  const onDownload = async () => {
+    await downloadSummary(
+      sumData,
+      'Lote ' + `${batch.number}`.padStart(3, '0')
+    );
+  };
+
   return (
     <div className={styles.container}>
+      {screen === 'summary' && (
+        <div className={styles.actions}>
+          <ButtonRound onClick={onDownload} type="download" />
+        </div>
+      )}
       <header>
         <button
           className={styles['back-button']}

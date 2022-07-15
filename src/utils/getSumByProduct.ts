@@ -21,7 +21,7 @@ export const getSumByProduct = (batch: BatchDetailI) => {
         amount: item.amount,
         unit: item.measurementUnit,
       };
-      if (prodIndex > 0) {
+      if (prodIndex >= 0) {
         products[prodIndex].clients.push(orderItem);
       } else {
         products.push({

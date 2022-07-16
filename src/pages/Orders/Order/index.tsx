@@ -72,7 +72,7 @@ const Order = ({ id }: PropsI) => {
           amount: item.amount,
           unit: item.measurementUnit,
           product: {
-            id: item.item._id,
+            id: item.item._id || '',
             conversions: item.item.conversions,
             description: item.item.description,
             defaultMeasurementUnit: item.item.defaultMeasurementUnit,

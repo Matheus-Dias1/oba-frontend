@@ -76,8 +76,8 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "name": "Electron starter",
-        "executableName": "electron-starter",
+        "name": "Oba green",
+        "executableName": "Oba Green",
         "icon": "assets/icon",
         "extraResource": [
           "assets"
@@ -108,7 +108,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "Electron Starter"
+            "name": "Oba"
           }
         },
         {

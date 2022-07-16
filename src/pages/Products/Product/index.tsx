@@ -96,7 +96,9 @@ const Product = ({ id }: PropsI) => {
 
   const onSubmit = async () => {
     if (!name || !unit) return;
+    pushNewConversion();
     setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 200));
     await setProduct(
       {
         description: name,

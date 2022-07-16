@@ -28,14 +28,11 @@ const Orders = () => {
     if (status === 'success' && !isFetching) {
       const lastPage = data.pages.length - 1;
       setHasNextPage(data.pages[lastPage].pageInfo.hasNextPage);
-      setOrders(old => {
-        const oldOrders = JSON.parse(JSON.stringify(old));
-        if (lastPage >= 0) {
-          oldOrders.push(...data.pages[lastPage].edges.map((x: any) => x.node));
-          return oldOrders;
-        }
-        return [];
+      const updatedOrders: OrderI[] = [];
+      data.pages.forEach(page => {
+        updatedOrders.push(...page.edges.map((x: any) => x.node));
       });
+      setOrders(updatedOrders);
     }
   }, [status, isFetching]);
 

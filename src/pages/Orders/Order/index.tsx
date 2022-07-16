@@ -63,8 +63,18 @@ const Order = ({ id }: PropsI) => {
     setLoading(true);
     const order: OrderI = await getOrder(id);
     if (order) {
+      const startDate = new Date(order.batch.startDate).toLocaleDateString(
+        'pt-BR'
+      );
+      const endDate = new Date(order.batch.endDate).toLocaleDateString('pt-BR');
       setClient(order.client);
-      setBatch({ value: order.batch._id, label: `${order.batch.number}` });
+      setBatch({
+        value: order.batch._id,
+        label: `#${`${order.batch.number}`.padStart(
+          3,
+          '0'
+        )}\t(${startDate} - ${endDate})`,
+      });
       dateRef.current.type = 'date';
       setDeliverAt(new Date(order.deliverAt).toISOString().split('T')[0]);
       setProdlist(

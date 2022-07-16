@@ -6,6 +6,8 @@ export interface OrderI {
   batch: {
     _id: string;
     number: number;
+    startDate: string;
+    endDate: string;
   };
   createdAt: string;
   deliverAt: string;

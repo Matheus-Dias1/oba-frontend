@@ -16,12 +16,18 @@ export const loadMoreBatches = async (query: string, opt: any) => {
     }
   );
   const response = await res.json();
-  const options = response.edges.map((x: any) => ({
-    value: x.node._id,
-    label: `${x.node.number}`,
-    cursor: x.cursor,
-  }));
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  const options = response.edges.map((x: any) => {
+    const startDate = new Date(x.node.startDate).toLocaleDateString('pt-BR');
+    const endDate = new Date(x.node.endDate).toLocaleDateString('pt-BR');
+    return {
+      value: x.node._id,
+      label: `#${`${x.node.number}`.padStart(
+        3,
+        '0'
+      )}\t(${startDate} - ${endDate})`,
+      cursor: x.cursor,
+    };
+  });
   return {
     options,
     hasMore: response.pageInfo.hasNextPage,

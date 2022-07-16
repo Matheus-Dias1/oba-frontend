@@ -12,7 +12,7 @@
     display: grid;
     place-items: center;
     transition: background-color 100ms ease-in;
-
+    width: 100%;
     svg {
       transform: scale(0.7);
     }
@@ -25,5 +25,6 @@
     &[data-active='true'] {
       background-color: $primary-light;
     }
+
   }
 }

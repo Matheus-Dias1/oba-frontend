@@ -3,31 +3,50 @@ import Batches from '../../../assets/icons/nav/batches.svg';
 import Orders from '../../../assets/icons/nav/orders.svg';
 import Products from '../../../assets/icons/nav/products.svg';
 import Logout from '../../../assets/icons/nav/logout.svg';
-import { Link, useLocation } from 'wouter';
 import { useContext } from 'react';
 import AuthContext from '../../../context/AuthContext';
+import NavContext, { PagesEnum } from '../../../context/NavContext';
+
+const TAB_PAGES = {
+  batch: [PagesEnum.BATCHES, PagesEnum.BATCH_DETAILS],
+  order: [PagesEnum.ORDERS, PagesEnum.EDIT_ORDER],
+  product: [PagesEnum.PRODUCTS, PagesEnum.EDIT_PRODUCT],
+}
 
 const SideNav = () => {
-  const [location] = useLocation();
+  const navCtx = useContext(NavContext);
   const authCtx = useContext(AuthContext);
+
 
   return (
     <div className={styles.nav}>
-      <Link href="/batches">
-        <button data-active={location.includes('/batches')}>
+      <div onClick={() => {
+        navCtx.setLocation({
+          page: PagesEnum.BATCHES
+        })
+      }}>
+        <button data-active={TAB_PAGES.batch.includes(navCtx.location.page)}>
           <Batches />
         </button>
-      </Link>
-      <Link href="/orders">
-        <button data-active={location.includes('/orders')}>
+      </div>
+      <div onClick={() => {
+        navCtx.setLocation({
+          page: PagesEnum.ORDERS
+        })
+      }}>
+        <button data-active={TAB_PAGES.order.includes(navCtx.location.page)}>
           <Orders />
         </button>
-      </Link>
-      <Link href="/products">
-        <button data-active={location.includes('/products')}>
+      </div>
+      <div onClick={() => {
+        navCtx.setLocation({
+          page: PagesEnum.PRODUCTS
+        })
+      }}>
+        <button data-active={TAB_PAGES.product.includes(navCtx.location.page)}>
           <Products />
         </button>
-      </Link>
+      </div>
       <button
         style={{ marginTop: 'auto' }}
         onClick={() => {

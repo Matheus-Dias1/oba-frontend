@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from 'react-query';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'wouter';
+import { useContext, useEffect, useState } from 'react';
 import ButtonRound from '../../components/ButtonRound';
 import styles from './styles.module.scss';
 import { getOrders } from '../../queries/orders/getOrders';
@@ -9,11 +8,12 @@ import Button from '../../components/Button';
 import Spacer from '../../components/Spacer';
 import Loader from '../../components/Loader';
 import OrderCard from './OrderCard';
+import NavContext, { PagesEnum } from '../../context/NavContext';
 
 const Orders = () => {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [orders, setOrders] = useState<OrderI[]>([]);
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
 
   const { data, status, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery(
@@ -55,7 +55,10 @@ const Orders = () => {
         <ButtonRound
           type="add"
           onClick={() => {
-            setLocation('/orders/new');
+            navCtx.setLocation({
+              page: PagesEnum.EDIT_ORDER,
+              id: 'new'
+            });
           }}
         />
       </div>

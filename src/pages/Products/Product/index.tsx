@@ -1,5 +1,4 @@
-import { KeyboardEvent, useEffect, useState } from 'react';
-import { useLocation } from 'wouter';
+import { KeyboardEvent, useContext, useEffect, useState } from 'react';
 import ButtonRound from '../../../components/ButtonRound';
 import { getProduct } from '../../../queries/products/getProducts';
 import { ProductI } from '../../../queries/products/models';
@@ -7,6 +6,7 @@ import { setProduct } from '../../../queries/products/setProduct';
 import DeleteIcon from '../../../assets/icons/actions/trash.svg';
 import AddIcon from '../../../assets/icons/actions/confirm.svg';
 import styles from './styles.module.scss';
+import NavContext, { PagesEnum } from '../../../context/NavContext';
 
 type Conversions = {
   unit: string;
@@ -19,7 +19,7 @@ interface PropsI {
 }
 
 const Product = ({ id }: PropsI) => {
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
 
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
@@ -112,7 +112,9 @@ const Product = ({ id }: PropsI) => {
       id !== 'new' ? id : undefined
     );
     setLoading(false);
-    setLocation('/products');
+    navCtx.setLocation({
+      page: PagesEnum.PRODUCTS,
+    });
   };
 
   const getTitle = () => (id === 'new' ? 'Novo produto' : 'Alterar produto');
@@ -121,7 +123,9 @@ const Product = ({ id }: PropsI) => {
       <div className={styles.actions}>
         <ButtonRound
           onClick={() => {
-            setLocation('/products');
+            navCtx.setLocation({
+              page: PagesEnum.PRODUCTS,
+            });
           }}
           type="cancel"
         />

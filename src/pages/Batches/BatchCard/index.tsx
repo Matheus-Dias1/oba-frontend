@@ -1,6 +1,7 @@
-import { useLocation } from 'wouter';
+import { useContext } from 'react';
 import Card from '../../../components/Card';
 import Chip from '../../../components/Chip';
+import NavContext, { PagesEnum } from '../../../context/NavContext';
 import { getRandomID } from '../../../utils/randomID';
 import styles from './styles.module.scss';
 
@@ -13,12 +14,16 @@ interface PropsI {
 }
 
 const BatchCard = ({ startDate, endDate, number, items, id }: PropsI) => {
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
+
   const dateText = `${startDate.toLocaleDateString(
     'pt-BR'
   )} - ${endDate.toLocaleDateString('pt-BR')}`;
   const handleCardClick = () => {
-    setLocation(`batches/${id}`);
+    navCtx.setLocation({
+      page: PagesEnum.BATCH_DETAILS,
+      id: id
+    });
   };
   return (
     <Card onClick={handleCardClick}>

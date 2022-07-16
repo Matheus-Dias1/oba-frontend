@@ -1,7 +1,8 @@
-import { useLocation } from 'wouter';
 import Card from '../../../components/Card';
 import styles from './styles.module.scss';
 import EditIcon from '../../../assets/icons/actions/edit.svg';
+import { useContext } from 'react';
+import NavContext, { PagesEnum } from '../../../context/NavContext';
 
 interface PropsI {
   id: string;
@@ -11,7 +12,7 @@ interface PropsI {
 }
 
 const ProductCard = ({ description, units, defaultUnit, id }: PropsI) => {
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
   const conversions = units.length ? ` - ${units.join(' - ')}` : '';
   return (
     <Card>
@@ -23,7 +24,10 @@ const ProductCard = ({ description, units, defaultUnit, id }: PropsI) => {
         </p>
         <button
           onClick={() => {
-            setLocation(`/products/${id}`);
+            navCtx.setLocation({
+              page: PagesEnum.EDIT_PRODUCT,
+              id
+            });
           }}
         >
           <EditIcon />

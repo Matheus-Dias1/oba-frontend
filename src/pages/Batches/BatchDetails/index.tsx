@@ -11,19 +11,27 @@ import { useLocation } from 'wouter';
 import { getRandomID } from '../../../utils/randomID';
 import { getBatch } from '../../../queries/batches/getBatches';
 import ButtonRound from '../../../components/ButtonRound';
-import { downloadSummary } from '../../../queries/batches/download';
+import {
+  downloadOrders,
+  downloadSummary,
+} from '../../../queries/batches/download';
 import Loader from '../../../components/Loader';
 import Spacer from '../../../components/Spacer';
+import { getSumByOrder } from '../../../utils/getSumByOrder';
 
 const SWITCH_OPTIONS = [
   {
-    title: 'Resumo',
-    value: 'summary',
+    title: 'Geral',
+    value: 'overview',
     default: true,
   },
   {
-    title: 'Detalhes',
-    value: 'details',
+    title: 'Por produto',
+    value: 'products',
+  },
+  {
+    title: 'Por cliente',
+    value: 'clients',
   },
 ];
 
@@ -32,7 +40,7 @@ interface PropsI {
 }
 
 const BatchDetails = ({ id }: PropsI) => {
-  const [screen, setScreen] = useState('summary');
+  const [screen, setScreen] = useState('overview');
 
   const { data, status } = useQuery(['batch'], async () => await getBatch(id));
   const isLoading = status === 'success';
@@ -49,6 +57,7 @@ const BatchDetails = ({ id }: PropsI) => {
 
   const sumData = isLoading ? getAllSum(batch) : [];
   const sumByProdData = isLoading ? getSumByProduct(batch) : [];
+  const sumByOrderData = isLoading ? getSumByOrder(batch) : [];
 
   const getTotal = (item: string) => {
     const prod = sumData.find(p => p.item === item);
@@ -57,19 +66,29 @@ const BatchDetails = ({ id }: PropsI) => {
   };
 
   const onDownload = async () => {
-    await downloadSummary(
-      sumData,
-      'Lote ' + `${batch.number}`.padStart(3, '0')
-    );
+    switch (screen) {
+      case 'overview':
+        await downloadSummary(
+          sumData,
+          'Lote ' + `${batch.number}`.padStart(3, '0')
+        );
+        return;
+      case 'clients':
+        await downloadOrders(
+          sumByOrderData,
+          'Lote ' + `${batch.number}`.padStart(3, '0')
+        );
+    }
   };
 
   return (
     <div className={styles.container}>
-      {screen === 'summary' && (
-        <div className={styles.actions}>
-          <ButtonRound onClick={onDownload} type="download" />
-        </div>
-      )}
+      {screen === 'overview' ||
+        (screen === 'clients' && (
+          <div className={styles.actions}>
+            <ButtonRound onClick={onDownload} type="download" />
+          </div>
+        ))}
       <header>
         <button
           className={styles['back-button']}
@@ -98,7 +117,7 @@ const BatchDetails = ({ id }: PropsI) => {
           <Loader type="ellipsis" color="primary" />
         </>
       )}
-      {screen === 'summary' && isLoading && (
+      {screen === 'overview' && isLoading && (
         <div style={{ marginTop: '2em', paddingBottom: '2em' }}>
           <Table
             data={sumData.map(d => ({
@@ -110,7 +129,28 @@ const BatchDetails = ({ id }: PropsI) => {
           />
         </div>
       )}
-      {screen === 'details' && isLoading && (
+      {screen === 'clients' && isLoading && (
+        <div style={{ paddingBottom: '2em' }}>
+          {sumByOrderData.map(prod => {
+            return (
+              <div key={prod.client}>
+                <div className={styles['prod-summary-container']}>
+                  <h2>{prod.client}</h2>
+                </div>
+                <Table
+                  data={prod.items.map(p => ({
+                    id: p.id,
+                    item: p.name,
+                    quantidade: p.amount,
+                    unidade: p.unit,
+                  }))}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {screen === 'products' && isLoading && (
         <div style={{ paddingBottom: '2em' }}>
           {sumByProdData.map(prod => {
             return (

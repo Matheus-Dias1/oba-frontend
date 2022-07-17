@@ -6,6 +6,7 @@
   border-radius: 0.5em 0.5em 0 0;
   overflow: hidden;
   border-collapse: collapse;
+  font-size: 1.2em;
 
   button {
     background: none;
@@ -29,6 +30,10 @@
     padding: 0.2em 0.4em;
     border: 2px solid $black;
     text-align: center;
+  }
+
+  tr:nth-child(even) {
+    background-color: darken(white, 15%);
   }
 
   th {

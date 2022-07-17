@@ -9,7 +9,38 @@ export const downloadSummary = async (
   }[],
   batch: string
 ) => {
-  const res = await fetch(`${env.API_URL}/download`, {
+  const res = await fetch(`${env.API_URL}/download/general`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      data,
+      batch,
+    }),
+  });
+
+  const buffer = await res.arrayBuffer();
+
+  const blob = new Blob([buffer], { type: 'text/xlsx;charset=utf-8;' });
+  saveFile(`${batch}.xlsx`, blob);
+};
+
+export const downloadOrders = async (
+  data: {
+    client: string;
+    items: {
+      id: string;
+      name: string;
+      amount: number;
+      unit: string;
+    }[];
+  }[],
+  batch: string
+) => {
+  const res = await fetch(`${env.API_URL}/download/orders`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,

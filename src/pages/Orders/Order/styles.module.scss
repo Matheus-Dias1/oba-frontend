@@ -4,7 +4,6 @@
   margin-inline: $page-margin;
   margin-top: $page-margin;
   flex-grow: 1;
-  position: relative;
 
   h1 {
     margin-bottom: 1em;
@@ -79,6 +78,7 @@
     gap: 0.5em;
     position: absolute;
     bottom: $page-margin;
-    right: 0;
+    right: $page-margin;
+    z-index: 1;
   }
 }

@@ -163,7 +163,11 @@ const Order = ({ id }: PropsI) => {
           };
           return newList;
         }
-        newList.push({ product, amount: parseFloat(amount), unit: unit.value });
+        newList.unshift({
+          product,
+          amount: parseFloat(amount),
+          unit: unit.value,
+        });
         return newList;
       });
     }

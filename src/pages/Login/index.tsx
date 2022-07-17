@@ -21,8 +21,10 @@ const Login = () => {
     setLoading(true);
     setError('');
     const res: LoginReturnT = await authCtx.login(user.trim(), password);
-    if (res.status === 'FAILED') setError(res.message!);
-    setLoading(false);
+    if (res.status === 'FAILED'){
+      setLoading(false);
+      setError(res.message!)
+    };
   };
 
   return (

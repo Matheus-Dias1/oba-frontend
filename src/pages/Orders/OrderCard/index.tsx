@@ -2,9 +2,9 @@ import Card from '../../../components/Card';
 import Chip from '../../../components/Chip';
 import { getRandomID } from '../../../utils/randomID';
 import styles from './styles.module.scss';
-import PDFIcon from '../../../assets/icons/pdf-file.svg';
 import EditIcon from '../../../assets/icons/pencil.svg';
-import { useLocation } from 'wouter';
+import { useContext } from 'react';
+import NavContext, { PagesEnum } from '../../../context/NavContext';
 
 interface PropsI {
   client: string;
@@ -23,7 +23,7 @@ const OrderCard = ({
   deliverAt,
   items,
 }: PropsI) => {
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
 
   return (
     <Card>
@@ -49,7 +49,10 @@ const OrderCard = ({
           {/* <PDFIcon /> */}
           <button
             onClick={() => {
-              setLocation(`/orders/${id}`);
+              navCtx.setLocation({
+                page: PagesEnum.EDIT_ORDER,
+                id
+              });
             }}
           >
             <EditIcon />

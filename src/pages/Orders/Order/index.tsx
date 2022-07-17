@@ -1,4 +1,4 @@
-import { useRef, useState, MutableRefObject, useEffect } from 'react';
+import { useRef, useState, MutableRefObject, useEffect, useContext } from 'react';
 import SelectPaginate from '../../../components/Select/SelectPaginate';
 import SelectSimple from '../../../components/Select/SelectSimple';
 import { loadMoreBatches } from './utils/fetchBatchOptions';
@@ -8,10 +8,10 @@ import styles from './styles.module.scss';
 import Table from '../../../components/Table';
 import { loadMoreProducts } from './utils/fetchProductOptions';
 import ButtonRound from '../../../components/ButtonRound';
-import { useLocation } from 'wouter';
 import { getOrder } from '../../../queries/orders/getOrders';
 import { OrderI } from '../../../queries/orders/models';
 import { saveOrder } from '../../../queries/orders/setOrder';
+import NavContext, { PagesEnum } from '../../../context/NavContext';
 
 type Product = {
   id: string;
@@ -55,7 +55,7 @@ const Order = ({ id }: PropsI) => {
   const dateRef = useRef() as MutableRefObject<HTMLInputElement>;
 
   // location
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
 
   // init data if is product editing
   const init = async () => {
@@ -214,7 +214,9 @@ const Order = ({ id }: PropsI) => {
 
     try {
       await saveOrder(body, id === 'new' ? undefined : id);
-      setLocation('/orders');
+      navCtx.setLocation({
+        page: PagesEnum.ORDERS
+      });
     } catch (err) {
       alert(`Erro ao salvar pedido: ${err}`);
       setLoading(false);
@@ -226,7 +228,9 @@ const Order = ({ id }: PropsI) => {
       <div className={styles.actions}>
         <ButtonRound
           onClick={() => {
-            setLocation('/orders');
+            navCtx.setLocation({
+              page: PagesEnum.ORDERS
+            });
           }}
           type="cancel"
         />

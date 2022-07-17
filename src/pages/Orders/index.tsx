@@ -1,6 +1,5 @@
 import { useInfiniteQuery } from 'react-query';
-import { useEffect, useState } from 'react';
-import { useLocation } from 'wouter';
+import { useContext, useEffect, useState } from 'react';
 import ButtonRound from '../../components/ButtonRound';
 import styles from './styles.module.scss';
 import { getOrders } from '../../queries/orders/getOrders';
@@ -9,11 +8,12 @@ import Button from '../../components/Button';
 import Spacer from '../../components/Spacer';
 import Loader from '../../components/Loader';
 import OrderCard from './OrderCard';
+import NavContext, { PagesEnum } from '../../context/NavContext';
 
 const Orders = () => {
   const [hasNextPage, setHasNextPage] = useState(false);
   const [orders, setOrders] = useState<OrderI[]>([]);
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
 
   const { data, status, fetchNextPage, isFetchingNextPage, isFetching } =
     useInfiniteQuery(
@@ -28,14 +28,11 @@ const Orders = () => {
     if (status === 'success' && !isFetching) {
       const lastPage = data.pages.length - 1;
       setHasNextPage(data.pages[lastPage].pageInfo.hasNextPage);
-      setOrders(old => {
-        const oldOrders = JSON.parse(JSON.stringify(old));
-        if (lastPage >= 0) {
-          oldOrders.push(...data.pages[lastPage].edges.map((x: any) => x.node));
-          return oldOrders;
-        }
-        return [];
+      const updatedOrders: OrderI[] = [];
+      data.pages.forEach(page => {
+        updatedOrders.push(...page.edges.map((x: any) => x.node));
       });
+      setOrders(updatedOrders);
     }
   }, [status, isFetching]);
 
@@ -55,7 +52,10 @@ const Orders = () => {
         <ButtonRound
           type="add"
           onClick={() => {
-            setLocation('/orders/new');
+            navCtx.setLocation({
+              page: PagesEnum.EDIT_ORDER,
+              id: 'new'
+            });
           }}
         />
       </div>

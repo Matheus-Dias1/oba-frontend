@@ -1,4 +1,3 @@
-import { Route, Switch, useLocation } from 'wouter';
 import Batches from '../../pages/Batches';
 import Orders from '../../pages/Orders';
 import Products from '../../pages/Products';
@@ -8,14 +7,29 @@ import SideNav from './SideNav';
 import BatchDetails from '../../pages/Batches/BatchDetails';
 import Order from '../../pages/Orders/Order';
 import Product from '../../pages/Products/Product';
-import { useEffect } from 'react';
+import { useContext } from 'react';
+import NavContext, { PagesEnum } from '../../context/NavContext';
 
 const Layout = () => {
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
+  const location = navCtx.location;
 
-  useEffect(() => {
-    setLocation('/batches');
-  }, []);
+  const getPage = () => {
+    switch (location.page) {
+      case PagesEnum.BATCHES:
+        return <Batches />;
+      case PagesEnum.BATCH_DETAILS:
+        return <BatchDetails id={location.id!} />
+      case PagesEnum.ORDERS:
+        return <Orders />
+      case PagesEnum.EDIT_ORDER:
+        return <Order id={location.id!} />
+      case PagesEnum.PRODUCTS:
+        return <Products />
+      case PagesEnum.EDIT_PRODUCT:
+        return <Product id={location.id!} />
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -23,26 +37,7 @@ const Layout = () => {
       <div className={styles.content}>
         <SideNav />
         <main>
-          <Switch>
-            <Route path="/batches">
-              <Batches />
-            </Route>
-            <Route path="/batches/:id">
-              {params => <BatchDetails id={params.id} />}
-            </Route>
-            <Route path="/products">
-              <Products />
-            </Route>
-            <Route path="/products/:id">
-              {params => <Product id={params.id} />}
-            </Route>
-            <Route path="/orders">
-              <Orders />
-            </Route>
-            <Route path="/orders/:id">
-              {params => <Order id={params.id} />}
-            </Route>
-          </Switch>
+          {getPage()}
         </main>
       </div>
     </div>

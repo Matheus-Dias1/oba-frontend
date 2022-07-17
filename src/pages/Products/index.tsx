@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'wouter';
+import { useContext, useEffect, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import Button from '../../components/Button';
 import ButtonRound from '../../components/ButtonRound';
@@ -10,9 +9,10 @@ import { getProducts } from '../../queries/products/getProducts';
 import { getRandomID } from '../../utils/randomID';
 import Loader from '../../components/Loader';
 import Spacer from '../../components/Spacer';
+import NavContext, { PagesEnum } from '../../context/NavContext';
 
 const Products = () => {
-  const [_, setLocation] = useLocation();
+  const navCtx = useContext(NavContext);
 
   const [search, setSearch] = useState('');
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -52,7 +52,10 @@ const Products = () => {
       <div className={styles['add-product']}>
         <ButtonRound
           onClick={() => {
-            setLocation('/products/new');
+            navCtx.setLocation({
+              page: PagesEnum.EDIT_PRODUCT,
+              id: 'new'
+            });
           }}
           type="add"
         />

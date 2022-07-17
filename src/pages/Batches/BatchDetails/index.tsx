@@ -4,10 +4,9 @@ import { BatchDetailI } from '../../../queries/batches/models';
 import { useQuery } from 'react-query';
 import { getAllSum } from '../../../utils/getAllSum';
 import { getSumByProduct } from '../../../utils/getSumByProduct';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import ButtonSwitch from '../../../components/ButtonSwitch';
 import Table from '../../../components/Table';
-import { useLocation } from 'wouter';
 import { getRandomID } from '../../../utils/randomID';
 import { getBatch } from '../../../queries/batches/getBatches';
 import ButtonRound from '../../../components/ButtonRound';
@@ -18,6 +17,7 @@ import {
 import Loader from '../../../components/Loader';
 import Spacer from '../../../components/Spacer';
 import { getSumByOrder } from '../../../utils/getSumByOrder';
+import NavContext, { PagesEnum } from '../../../context/NavContext';
 
 const SWITCH_OPTIONS = [
   {
@@ -40,13 +40,12 @@ interface PropsI {
 }
 
 const BatchDetails = ({ id }: PropsI) => {
+  const navCtx = useContext(NavContext);
   const [screen, setScreen] = useState('overview');
 
   const { data, status } = useQuery(['batch'], async () => await getBatch(id));
   const isLoading = status === 'success';
   const batch: BatchDetailI = data;
-
-  const [_, setLocation] = useLocation();
 
   const batchNumber = isLoading ? '#' + `${batch.number}`.padStart(3, '0') : '';
   const batchDates = isLoading
@@ -93,7 +92,9 @@ const BatchDetails = ({ id }: PropsI) => {
         <button
           className={styles['back-button']}
           onClick={() => {
-            setLocation('/batches');
+            navCtx.setLocation({
+              page: PagesEnum.BATCHES,
+            });
           }}
         >
           <BackIcon />

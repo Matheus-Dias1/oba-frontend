@@ -39,7 +39,7 @@ const Button = ({
       disabled={disabled}
       data-loading={loading}
     >
-      {loading ? <Loader /> : title}
+      {loading ? <Loader color={variant === 'leaked' ? 'primary' : 'white'} /> : title}
     </button>
   );
 };

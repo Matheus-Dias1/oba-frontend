@@ -82,12 +82,11 @@ const BatchDetails = ({ id }: PropsI) => {
 
   return (
     <div className={styles.container}>
-      {screen === 'overview' ||
-        (screen === 'clients' && (
-          <div className={styles.actions}>
-            <ButtonRound onClick={onDownload} type="download" />
-          </div>
-        ))}
+      {(screen === 'overview' || screen === 'clients') && (
+        <div className={styles.actions}>
+          <ButtonRound onClick={onDownload} type="download" />
+        </div>
+      )}
       <header>
         <button
           className={styles['back-button']}

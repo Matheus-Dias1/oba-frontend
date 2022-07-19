@@ -18,8 +18,8 @@ interface IProps {
 }
 
 export const AuthContextProvider = ({ children }: IProps) => {
-  // const [token, setToken] = useState('');
-  const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [token, setToken] = useState('');
+  // const [token, setToken] = useState(localStorage.getItem('token') || '');
   const isLoggedIn = !!token;
 
   const login = useCallback(async (user: string, pass: string) => {

@@ -25,7 +25,7 @@ export const downloadSummary = async (
   const buffer = await res.arrayBuffer();
 
   const blob = new Blob([buffer], { type: 'text/xlsx;charset=utf-8;' });
-  saveFile(`${batch}.xlsx`, blob);
+  saveFile(`${batch} GERAL.xlsx`, blob);
 };
 
 export const downloadOrders = async (
@@ -56,7 +56,7 @@ export const downloadOrders = async (
   const buffer = await res.arrayBuffer();
 
   const blob = new Blob([buffer], { type: 'text/xlsx;charset=utf-8;' });
-  saveFile(`${batch}.xlsx`, blob);
+  saveFile(`${batch} PEDIDOS.xlsx`, blob);
 };
 
 const saveFile = (fileName: string, blob: Blob) => {

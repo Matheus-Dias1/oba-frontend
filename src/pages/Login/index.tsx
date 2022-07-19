@@ -9,7 +9,8 @@ import AuthContext, { LoginReturnT } from '../../context/AuthContext';
 
 const Login = () => {
   const authCtx = useContext(AuthContext);
-
+  
+  const [screen, setScreen] = useState<'login' | 'signup'>('login')
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -62,7 +63,18 @@ const Login = () => {
                 setPassword(e.target.value);
               }}
             />
-            <Button loading={loading} title={'Entrar'} onClick={handleLogin} />
+            <Button
+              loading={loading}
+              title={screen === 'login' ? 'Entrar' : 'Cadastrar'}
+              onClick={handleLogin}
+            />
+            <p
+              className={styles['switch-screen']}
+              onClick={() => {
+                setScreen(old => old === 'login' ? 'signup' : 'login')
+              }}>
+              {screen === 'login' ? 'Fazer cadastro' : 'Fazer login'}
+            </p>
             {error && <p className={styles['error-message']}>{error}</p>}
           </form>
         </div>

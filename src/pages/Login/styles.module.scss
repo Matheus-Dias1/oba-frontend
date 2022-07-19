@@ -64,4 +64,12 @@
 
 .error-message {
   color: $red;
+  text-align: center;
+}
+
+.switch-screen {
+  color: $primary;
+  cursor: pointer;
+  font-weight: 600;
+  align-self: flex-end;
 }

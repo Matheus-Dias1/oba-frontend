@@ -6,12 +6,14 @@ import cover from '../../assets/visuals/login-image.png';
 import CloseIcon from '../../assets/icons/window/close.svg';
 import { WindowAction } from '../../../electron/types';
 import AuthContext, { LoginReturnT } from '../../context/AuthContext';
+import { createUser } from '../../queries/users/newUser';
 
 const Login = () => {
   const authCtx = useContext(AuthContext);
-  
-  const [screen, setScreen] = useState<'login' | 'signup'>('login')
+
+  const [screen, setScreen] = useState<'login' | 'signup'>('login');
   const [user, setUser] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,13 +21,26 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!user || !password) return;
+    if (screen === 'signup' && !name) return;
     setLoading(true);
     setError('');
-    const res: LoginReturnT = await authCtx.login(user.trim(), password);
-    if (res.status === 'FAILED'){
+    if (screen === 'signup') {
+      await createUser(user, password, name);
+      window.alert(
+        'Usuário criado, solicite a liberação do acesso a um administrador'
+      );
+      setUser('');
+      setPassword('');
+      setName('');
+      setScreen('login');
       setLoading(false);
-      setError(res.message!)
-    };
+    } else {
+      const res: LoginReturnT = await authCtx.login(user.trim(), password);
+      if (res.status === 'FAILED') {
+        setLoading(false);
+        setError(res.message!);
+      }
+    }
   };
 
   return (
@@ -47,10 +62,20 @@ const Login = () => {
               e.preventDefault();
             }}
           >
+            {screen === 'signup' && (
+              <input
+                type="text"
+                value={name}
+                placeholder="Seu nome"
+                onChange={e => {
+                  setName(e.target.value);
+                }}
+              />
+            )}
             <input
               type="text"
               value={user}
-              placeholder="Usuário"
+              placeholder={screen === 'login' ? 'Usuário' : 'Nome de usuário'}
               onChange={e => {
                 setUser(e.target.value);
               }}
@@ -71,8 +96,9 @@ const Login = () => {
             <p
               className={styles['switch-screen']}
               onClick={() => {
-                setScreen(old => old === 'login' ? 'signup' : 'login')
-              }}>
+                setScreen(old => (old === 'login' ? 'signup' : 'login'));
+              }}
+            >
               {screen === 'login' ? 'Fazer cadastro' : 'Fazer login'}
             </p>
             {error && <p className={styles['error-message']}>{error}</p>}

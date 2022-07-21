@@ -37,9 +37,13 @@ const BatchCard = ({ startDate, endDate, number, items, id }: PropsI) => {
           <h3>Items</h3>
           {items.length ? (
             <div className={styles.items}>
-              {items.map((item: string) => (
+              {items.slice(0,19).map((item: string) => (
                 <Chip title={item} key={`${item}-${getRandomID()}`} />
               ))}
+              {items.length > 19
+                && <Chip title={
+                  `+${items.length-19} ${items.length-19 ===1  ?'item' : 'itens'}`
+                }/>}
             </div>
           ) : (
             <p>Ainda não há pedidos para esse lote</p>

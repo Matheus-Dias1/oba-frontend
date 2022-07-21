@@ -31,6 +31,7 @@ export const downloadSummary = async (
 export const downloadOrders = async (
   data: {
     client: string;
+    deliverAt: Date;
     items: {
       id: string;
       name: string;

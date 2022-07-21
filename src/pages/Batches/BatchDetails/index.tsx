@@ -133,9 +133,9 @@ const BatchDetails = ({ id }: PropsI) => {
         <div style={{ paddingBottom: '2em' }}>
           {sumByOrderData.map(prod => {
             return (
-              <div key={prod.client}>
+              <div key={`${prod.client}-${getRandomID()}`}>
                 <div className={styles['prod-summary-container']}>
-                  <h2>{prod.client}</h2>
+                  <h2>{`${prod.client} - ${prod.deliverAt.toLocaleDateString('pt-BR')}`}</h2>
                 </div>
                 <Table
                   data={prod.items.map(p => ({

@@ -3,11 +3,12 @@ import CancelIcon from '../../assets/icons/actions/cancel.svg';
 import ConfirmIcon from '../../assets/icons/actions/confirm.svg';
 import AddIcon from '../../assets/icons/actions/add.svg';
 import DownloadIcon from '../../assets/icons/actions/download.svg';
+import FilterIcon from '../../assets/icons/actions/filter.svg';
 import { ReactNode } from 'react';
 import Loader from '../Loader';
 
 interface PropsI {
-  type: 'cancel' | 'ok' | 'add' | 'download';
+  type: 'cancel' | 'ok' | 'add' | 'download' | 'filter';
   onClick: () => void;
   disabled?: boolean;
   loading?: boolean;
@@ -24,6 +25,8 @@ const ButtonRound = ({ type, onClick, disabled, loading }: PropsI) => {
         return [<AddIcon />, 'primary'];
       case 'download':
         return [<DownloadIcon />, 'primary'];
+      case 'filter':
+        return [<FilterIcon />, 'primary'];
     }
   };
 

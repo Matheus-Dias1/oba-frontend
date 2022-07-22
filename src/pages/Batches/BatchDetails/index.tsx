@@ -4,7 +4,7 @@ import { BatchDetailI } from '../../../queries/batches/models';
 import { useQuery } from 'react-query';
 import { getAllSum } from '../../../utils/getAllSum';
 import { getSumByProduct } from '../../../utils/getSumByProduct';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ButtonSwitch from '../../../components/ButtonSwitch';
 import Table from '../../../components/Table';
 import { getRandomID } from '../../../utils/randomID';
@@ -18,6 +18,7 @@ import Loader from '../../../components/Loader';
 import Spacer from '../../../components/Spacer';
 import { getSumByOrder } from '../../../utils/getSumByOrder';
 import NavContext, { PagesEnum } from '../../../context/NavContext';
+import ButtonSelect from '../../../components/ButtonSelect';
 
 const SWITCH_OPTIONS = [
   {
@@ -42,10 +43,56 @@ interface PropsI {
 const BatchDetails = ({ id }: PropsI) => {
   const navCtx = useContext(NavContext);
   const [screen, setScreen] = useState('overview');
+  const [showFilters, setShowFilters] = useState(false);
 
   const { data, status } = useQuery(['batch'], async () => await getBatch(id));
   const isLoading = status === 'success';
   const batch: BatchDetailI = data;
+
+  const [selectedOrders, setSelectedOrders] = useState<
+    {
+      title: string;
+      value: string;
+      selected: boolean;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (batch && batch.orders) {
+      setSelectedOrders(
+        batch.orders
+          .sort((a, b) => {
+            const date1 = new Date(a.deliverAt);
+            const date2 = new Date(b.deliverAt);
+
+            if (date1 > date2) return 1;
+            if (date1 < date2) return -1;
+            return 0;
+          })
+          .map(b => ({
+            title: `${b.client} - ${new Date(b.deliverAt).toLocaleDateString(
+              'pt-BR'
+            )}`,
+            value: b._id,
+            selected: true,
+          }))
+      );
+    }
+  }, [status]);
+
+  const onSelectionChange = (id: string) => {
+    setSelectedOrders(old => {
+      const cpy = JSON.parse(JSON.stringify(old));
+      const order: { title: string; value: string; selected: boolean } =
+        cpy.find(
+          (x: { title: string; value: string; selected: boolean }) =>
+            x.value === id
+        );
+      if (!order) return old;
+      order.selected = !order.selected;
+      return cpy;
+    });
+  };
 
   const batchNumber = isLoading ? '#' + `${batch.number}`.padStart(3, '0') : '';
   const batchDates = isLoading
@@ -54,10 +101,18 @@ const BatchDetails = ({ id }: PropsI) => {
       ).toLocaleDateString('pt-BR')}`
     : '';
 
-  const sumData = isLoading ? getAllSum(batch) : [];
-  const sumByProdData = isLoading ? getSumByProduct(batch) : [];
-  const sumByOrderData = isLoading ? getSumByOrder(batch) : [];
+  const filteredBatch = isLoading
+    ? {
+        ...batch,
+        orders: batch.orders.filter(
+          x => selectedOrders.find(y => y.value === x._id)?.selected
+        ),
+      }
+    : undefined;
 
+  const sumData = isLoading ? getAllSum(filteredBatch!) : [];
+  const sumByProdData = isLoading ? getSumByProduct(filteredBatch!) : [];
+  const sumByOrderData = isLoading ? getSumByOrder(filteredBatch!) : [];
   const getTotal = (item: string) => {
     const prod = sumData.find(p => p.item === item);
     if (!prod) return '';
@@ -110,7 +165,16 @@ const BatchDetails = ({ id }: PropsI) => {
             }}
           />
         </div>
+        <ButtonRound
+          onClick={() => setShowFilters(old => !old)}
+          type="filter"
+        />
       </header>
+      {showFilters && (
+        <div className={styles.filters}>
+          <ButtonSelect options={selectedOrders} onChange={onSelectionChange} />
+        </div>
+      )}
       {status === 'loading' && (
         <>
           <Spacer />
@@ -135,7 +199,9 @@ const BatchDetails = ({ id }: PropsI) => {
             return (
               <div key={`${prod.client}-${getRandomID()}`}>
                 <div className={styles['prod-summary-container']}>
-                  <h2>{`${prod.client} - ${prod.deliverAt.toLocaleDateString('pt-BR')}`}</h2>
+                  <h2>{`${prod.client} - ${prod.deliverAt.toLocaleDateString(
+                    'pt-BR'
+                  )}`}</h2>
                 </div>
                 <Table
                   data={prod.items.map(p => ({

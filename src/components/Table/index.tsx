@@ -79,7 +79,9 @@ const Table = ({ data: dataP, showCols, onClick }: PropsI) => {
                     textAlign: STYLE_CONFIG[i]['text-align'],
                   }}
                 >
-                  {row[col]}
+                  {typeof row[col] === 'number'
+                    ? row[col].toLocaleString('pt-BR')
+                    : row[col]}
                 </td>
               ))}
             {onClick && (

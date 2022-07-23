@@ -1,4 +1,10 @@
-import { useRef, useState, MutableRefObject, useEffect, useContext } from 'react';
+import {
+  useRef,
+  useState,
+  MutableRefObject,
+  useEffect,
+  useContext,
+} from 'react';
 import SelectPaginate from '../../../components/Select/SelectPaginate';
 import SelectSimple from '../../../components/Select/SelectSimple';
 import { loadMoreBatches } from './utils/fetchBatchOptions';
@@ -215,7 +221,7 @@ const Order = ({ id }: PropsI) => {
     try {
       await saveOrder(body, id === 'new' ? undefined : id);
       navCtx.setLocation({
-        page: PagesEnum.ORDERS
+        page: PagesEnum.ORDERS,
       });
     } catch (err) {
       alert(`Erro ao salvar pedido: ${err}`);
@@ -229,7 +235,7 @@ const Order = ({ id }: PropsI) => {
         <ButtonRound
           onClick={() => {
             navCtx.setLocation({
-              page: PagesEnum.ORDERS
+              page: PagesEnum.ORDERS,
             });
           }}
           type="cancel"
@@ -303,6 +309,9 @@ const Order = ({ id }: PropsI) => {
             value={amount}
             onChange={e => {
               setAmount(e.target.value);
+            }}
+            onKeyPress={e => {
+              if (e.code === 'Period') e.preventDefault();
             }}
             placeholder="Quantidade"
           />

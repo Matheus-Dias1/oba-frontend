@@ -163,6 +163,9 @@ const Product = ({ id }: PropsI) => {
               placeholder="1"
               onBlur={pushNewConversion}
               onKeyUp={e => handleEnterKey(e)}
+              onKeyPress={e => {
+                if (e.code === 'Period') e.preventDefault();
+              }}
             />
             <p>{unit}</p>
             <div className={styles.separator} />
@@ -175,6 +178,9 @@ const Product = ({ id }: PropsI) => {
               onBlur={pushNewConversion}
               onKeyUp={e => handleEnterKey(e)}
               placeholder="2"
+              onKeyPress={e => {
+                if (e.code === 'Period') e.preventDefault();
+              }}
             />
             <input
               type="text"

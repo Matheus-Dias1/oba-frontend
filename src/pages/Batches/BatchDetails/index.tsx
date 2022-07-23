@@ -116,7 +116,7 @@ const BatchDetails = ({ id }: PropsI) => {
   const getTotal = (item: string) => {
     const prod = sumData.find(p => p.item === item);
     if (!prod) return '';
-    return `${prod.amount} ${prod.unit}`;
+    return `${prod.amount.toLocaleString('pt-BR')} ${prod.unit}`;
   };
 
   const onDownload = async () => {

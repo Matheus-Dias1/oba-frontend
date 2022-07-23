@@ -32,5 +32,10 @@ export const getSumByProduct = (batch: BatchDetailI) => {
     });
   });
 
-  return products;
+  return products.sort((a, b) => {
+    const A: string = a.item.toLowerCase();
+    const B: string = b.item.toLowerCase();
+
+    return A.localeCompare(B);
+  });
 };
